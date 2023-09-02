@@ -1,0 +1,7 @@
+load 17
+return 0
+
+load 7
+add 10
+return 0
+
