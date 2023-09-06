@@ -50,17 +50,32 @@ int main() {
 
 --------------------------------------------------------------------------
 
+### Repositories
+  -  [sowens23-GitHub](https://github.com/sowens23)
+
+### Notes, Assignments, and Labs
+  - Notes: [Week-1](#Week-1) | [Week-2](#Week-2) | [Week-3](#Week-3)
+
+    Assignment List
+    --- | ---
+    [HW00](https://github.com/sowens23/CS-F301/blob/main/week1/hw00.cpp) | 	[HW01](https://github.com/sowens23/CS-F301/blob/main/week2/hw01.asm) 
 
 
+# Week-2
 
-Week 2
-
-2023-09-08
-
-
-2023-09-06
+### 2023-09-08
 
 
+### 2023-09-06
+  - A brittle fix is when you 'fix' a loop to catch conditions that you cannot calculate.
+    - ie. On inputs [0,10], return +2 if integer is even.
+    - It's only appropriate to check if values are even then add two and return
+    - Do not say if (x=0) else x=2, else x=4. --> BAD
+    
+  - There is a "unsigned int" error when you check a for loop int to a vector.size()
+    - To avoid this issue you can use (int): for (int i=1;i<(int)nums.size();i++) {}
+
+  - rbx is main's general register, which means you can only use it, if you push rbx, then pop rbx at the end of your function
 
   ```
   ;Basic return int 5
@@ -68,18 +83,71 @@ Week 2
   ret
   ```
 
-Week 1
+  ```
+  ; Call Function
+  extern print_int ; This works as an include
+  call print_int ; This calls the function
+  ret ;
+  ```
+  
+  - The stack is a little block of memory used to access memory
+    - You are supposed to clean the stack before you return. Treating this similar to how you would allocate memory and use pointers in C++
+    - If you want to save something, you must push it to the stack. When calling other functions, they may wipe your scratch registers.
+    - Call and Ret are implicitely popping and pushing. This means that you must ALWAYS pop an equal amount to the times you push. Absolutely necessary.
+      - This is how programs know where to go when they finish running. RET and CALL are the register values of where they go after they are done running.
+      - In lieu of 'ret' you could do 'pop rdx; jmp rdx'
+    - You must pop in the opposite order of your pushes, to return the same values to the registers.
+  - You must push something first, before you call a function this "aligns the stack"
+  - Stack overflow is when you have pushed to many values for the stack to hold.
+  - 
 
-2023-08-30
-  NASM - Netwide assembler
+  Write a for loop
+  - Three rules when creating a for loop
+    - You must initialize a counter
+    - You must compare two values
+    - You must incriment values.
+  ```
+    push 7 ; align the stack
 
+    mov rcx, 0 ; i=0
+    start:
+      mov rdi, rcx
+      push rcx ; this saves your rcx value before the function
+      extern print_int
+      call print_int
+      pop rcx ; this pulls the last pushed value on the stack to rcx
+
+      add rcx, 1 ; i++
+      cmp rcx, 10 ; i<10
+      jl start ; iterate based on compare
+    ret
+  ```
+
+  ```
+  ; The Stack
+  push 7 ; This will push the number 7 onto the top of the stack
+  mov rcx,10 ; rcx, rax will be wiped because it's used by print_int
+  ;pop rax ; This will remove the number 7 from the stack
+
+  ; Using a function print
+  mov rdi, 123
+  extern print_int ; This is a function, it takes a parameter rdi
+  call print_int ; This will print 123
+
+  pop rax
+  mov rax, rcx
+  ret
+  ```
+
+# Week 1
+
+### 2023-08-30
+  - NASM - Netwide assembler
     ```
     ; Input: rdi is our first argument
     mov rcx, rdi    ; move arg to temp
     sub rcx, 4      ; 
-
     ```
-
     ```
     ; An example of a loop
     mov rcx, 3
@@ -89,9 +157,7 @@ Week 1
       mov rdi, rdx
     theGood:
     mov rax, 4
-    
     ```
-
     ```
     ; rax is the register that 'ret' will return
     mov rcx, 2; moves value 2 to register rcx
@@ -104,8 +170,8 @@ Week 1
   
     ```
 
-2023-08-28
-  Don't be an int x32 loser, use longs
-  couple checks and inputs in the same line IE
-    ret - Returns a value
-  RDI is your input variable
+### 2023-08-28
+  - Don't be an int x32 loser, use longs
+  - couple checks and inputs in the same line IE
+    - ret - Returns a value
+  - RDI is your input variable
