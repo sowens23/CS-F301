@@ -1,17 +1,15 @@
 
 # CS-F301
-Assembly Language Programming
-
-
---------------------------------------------------------------------------
-
-# Spencer's CS202 Class Notes :dizzy: :earth_americas:
+## Assembly Language Programming
 ```
 #include <iostream>
 int main() {
 	std::cout << "Hello traveller, here's a towel for protection. Take care of yourself out there." << std::endl;
 }
 ```
+
+--------------------------------------------------------------------------
+
 ## Other-Files
 - [Header Notes](https://github.com/2023-Spring-UAF-CS202/notes-sowens23/blob/main/HeaderNotes.md)
 
@@ -55,7 +53,20 @@ int main() {
 
 
 
+Week 2
 
+2023-09-08
+
+
+2023-09-06
+
+
+
+  ```
+  ;Basic return int 5
+  mov eax, 5
+  ret
+  ```
 
 Week 1
 
@@ -94,6 +105,7 @@ Week 1
     ```
 
 2023-08-28
-Don't be an int x32 loser, use longs
-couple checks and inputs in the same line IE
-  ret - Returns a value
+  Don't be an int x32 loser, use longs
+  couple checks and inputs in the same line IE
+    ret - Returns a value
+  RDI is your input variable
