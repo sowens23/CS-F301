@@ -1,6 +1,3 @@
-
-
-
 We're going to start with compiling 
 
 1) Write program.asm
