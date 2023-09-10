@@ -12,16 +12,16 @@ int main() {
 ## Class Repositories and References
   - [sowens23-GitHub](https://github.com/sowens23)
   - [GitHubPortal](https://github.com/sowens23/Newbie-Gains/blob/main/README.md)
-  - [CS-301 Class Homepage](https://docs.google.com/document/d/e/2PACX-1vTJJ1vxMtlhlFUd6GlIUGHZ9jElR95Tau21rUKf_HHHFdelLhEW6GRo9WlRi08CCHe5xkdo8Mpw11UM/pub)
+  - [CS-F301 Class Homepage](https://docs.google.com/document/d/e/2PACX-1vTJJ1vxMtlhlFUd6GlIUGHZ9jElR95Tau21rUKf_HHHFdelLhEW6GRo9WlRi08CCHe5xkdo8Mpw11UM/pub)
   - [CS-F301 Class Recordings](https://www.google.com/url?q=https://docs.google.com/document/d/1OBlNDWjTrCQqKWx69IEePGC9RmEBhUOiR2o07ZWzIeU/edit&sa=D&source=editors&ust=1694312255234741&usg=AOvVaw0NK7nI30MXzI07lNPPP_jw)
   - [Assembly CheatSheet](https://docs.google.com/document/d/1hwABu-SL6u2cdhVkjOCUU6T0UyALujep1NfwYfQzWSo/edit)
 
 ## Notes, Assignments, and Labs
-  - | Weekly Notes | Assignments | Other Notes |
-    | --- | --- | --- |
-    | [Week-1](#Week-1) | [HW00](https://github.com/sowens23/CS-F301/blob/main/week1/hw00.cpp) | |
-    | [Week-2](#Week-2) | [HW01](https://github.com/sowens23/CS-F301/blob/main/week2/hw01.asm) | |
-    | [Week-3](#Week-3) | | |
+  | Weekly Notes | Assignments | Other Notes |
+  | --- | --- | --- |
+  | [Week-1](#Week-1) | [HW00](https://github.com/sowens23/CS-F301/blob/main/week1/hw00.cpp) | |
+  | [Week-2](#Week-2) | [HW01](https://github.com/sowens23/CS-F301/blob/main/week2/hw01.asm) | |
+  | [Week-3](#Week-3) | | |
 
 # Big Notes
 
