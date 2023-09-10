@@ -1,68 +1,32 @@
+# CS-F301 Assembly Language Programming
+## Class Notes and Homework Repository :dizzy: :earth_americas:
 
-# CS-F301
-## Assembly Language Programming
 ```
 #include <iostream>
 int main() {
 	std::cout << "Hello traveller, here's a towel for protection. Take care of yourself out there." << std::endl;
+  return 0;
 }
 ```
 
---------------------------------------------------------------------------
+## Class Repositories and References
+  - [sowens23-GitHub](https://github.com/sowens23)
+  - [GitHubPortal](https://github.com/sowens23/Newbie-Gains/blob/main/README.md)
+  - [CS-301 Class Homepage](https://docs.google.com/document/d/e/2PACX-1vTJJ1vxMtlhlFUd6GlIUGHZ9jElR95Tau21rUKf_HHHFdelLhEW6GRo9WlRi08CCHe5xkdo8Mpw11UM/pub)
+  - [CS-F301 Class Recordings](https://www.google.com/url?q=https://docs.google.com/document/d/1OBlNDWjTrCQqKWx69IEePGC9RmEBhUOiR2o07ZWzIeU/edit&sa=D&source=editors&ust=1694312255234741&usg=AOvVaw0NK7nI30MXzI07lNPPP_jw)
+  - [Assembly CheatSheet](https://docs.google.com/document/d/1hwABu-SL6u2cdhVkjOCUU6T0UyALujep1NfwYfQzWSo/edit)
 
-## Other-Files
-- [Header Notes](https://github.com/2023-Spring-UAF-CS202/notes-sowens23/blob/main/HeaderNotes.md)
+## Notes, Assignments, and Labs
+  - | Weekly Notes | Assignments | Other Notes |
+    | --- | --- | --- |
+    | [Week-1](#Week-1) | [HW00](https://github.com/sowens23/CS-F301/blob/main/week1/hw00.cpp) | |
+    | [Week-2](#Week-2) | [HW01](https://github.com/sowens23/CS-F301/blob/main/week2/hw01.asm) | |
+    | [Week-3](#Week-3) | | |
 
-### Markdown rules and tips
-- [GitHub Markdown Documentation](https://docs.github.com/en/get-started/writing-on-github)
-- [Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet "github Markdown Cheatsheet")
-- [VIM Cheatsheet](https://phoenixnap.com/kb/wp-content/uploads/2021/11/vim-commands-cheat-sheet-by-pnap.pdf "Vim Cheatsheet")
-- [Markdown Emojis](https://github.com/markdown-templates/markdown-emojis)
-- Two spaces at the end of a line, will mark a new line
-
-### Notes, Assignments and Labs
-- Notes: [Week-1](#Week-1) - [Week-2](#Week-2) - [Week-3](#Week-3) - [Week-4](#Week-4) - [Week-5](#Week-5) - [Week-6](#Week-6) - [Week-7](#Week-7) - [Week-8](#Week-8) - [Week-9](#Week-9) - [Week-10](#Week-10) - [Week-11](#Week-11) - [Week-12](#Week-12) - [Week-13](#Week-13) - [Week-14](#Week-14) - [Week-15](#Week-15)
-
-	Assignment | Lab
-	--- | ---
-	[Overview](https://github.com/2023-Spring-UAF-CS202/overview) | [SampleCode](https://github.com/2023-Spring-UAF-CS202/sample_code)
-	NA | [Lab00](https://github.com/2023-Spring-UAF-CS202/lab00-sowens23)
-	[Homework01](https://github.com/2023-Spring-UAF-CS202/hw01-sowens23) | [Lab01](https://github.com/2023-Spring-UAF-CS202/lab01-sowens23)
-	[Homework02](https://github.com/2023-Spring-UAF-CS202/hw02-sowens23) | [Lab02](https://github.com/2023-Spring-UAF-CS202/lab02-sowens23)
-	[Homework03](https://github.com/2023-Spring-UAF-CS202/hw03-sowens23) | [Lab03](https://github.com/2023-Spring-UAF-CS202/lab03-sowens23)
-	[Homework04](https://github.com/2023-Spring-UAF-CS202/hw04-sowens23) | [Lab05](https://github.com/2023-Spring-UAF-CS202/lab05-sowens23)
-
-# Week-15
-[Sample Code](https://github.com/2023-Spring-UAF-CS202/sample_code/tree/main/week15) : No Overview : [Top](#TOP)
-### 4/27/2023
-
-### 4/25/2023
-	- Talked about HW04
-
-# Week-14
-[Sample Code](https://github.com/2023-Spring-UAF-CS202/sample_code/tree/main/week14) : No Overview : [Top](#TOP)
-### 4/20/2023
-	- Passing functions to as a parameter
-		- void firstFunction(std::function<void(int)> secondFunction) {...}
-	- When you call a function with a parameter
-		- A copy constructor must exist for you to pass a class object.
-		- A copy constructor does not exist for a virtual class
-
---------------------------------------------------------------------------
-
-### Repositories
-  -  [sowens23-GitHub](https://github.com/sowens23)
-
-### Notes, Assignments, and Labs
-  - Notes: [Week-1](#Week-1) | [Week-2](#Week-2) | [Week-3](#Week-3)
-
-    Assignment List
-    --- | ---
-    [HW00](https://github.com/sowens23/CS-F301/blob/main/week1/hw00.cpp) | 	[HW01](https://github.com/sowens23/CS-F301/blob/main/week2/hw01.asm) 
-
+# Big Notes
 
 # Week-2
-
+[Top](#TOP)
 ### 2023-09-08
   - Running over Binary, and Hexidecimal 
     - b10 10 in b2 is 1010 in b16 is a
@@ -184,7 +148,7 @@ int main() {
       ```
 
 # Week 1
-
+[Top](#TOP)
 ### 2023-08-30
   - NASM - Netwide assembler
     ```
