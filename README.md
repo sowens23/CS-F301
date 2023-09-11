@@ -26,6 +26,60 @@ int main() {
 
 # Big Notes
 
+# Week-3
+### 2023-09-11
+  ##### Recap and Why 'Assmebly'. Intro to Pointers
+  - 8 bit signed int can reach about  billion
+    - We can caluclate factorials up to 12, in an int.
+    - Calculating in Hexidecimal (base 16) When you multiply by factors of 16, it shifts the hexidecimal value left, and puts a 0 on the end
+      - 0xFACE * 16 = 0xFACE0
+      - 0xFACE * 256 = 0xFACE00
+    - In Assembly, you can add "L"or"l" (Capital preferred) onto any number, decimal, hexidecimal to upgrade an Int to LOng
+
+    - Proper Factorial Calculator
+    ```
+    
+
+    mov rsi, 
+      return 0xFACEL * 256L * Scale
+    ```
+    - When we are dealing with overflow in assembly
+      - If we are working with very large numbers, we might be best calculating with double variables.
+    
+    - rcx is built to count over loops
+    - rdi is input #1
+    - All 'ret's return to the last call
+      - This is how your final ret of your program knows where to go afterwards
+      - Call and return are handy, because if you have multiple potential jumps for a function
+    - Push, jmp, and call are all the same
+    - Pop and ret are also the same.
+    
+    ```
+    ; Input: rdi, how far to multiply
+    mov rdx,  ; sum of factorials 
+    mov rsi, 1 ; n loop
+    jmp checkOuter
+    startOuter:
+      ; Calculate factorial
+      move rax, 1 ; product = 1
+      mov rcx, 2 ; i=2
+      jmp checkLoop
+      startLoop: ; loop over numbers up to rdi
+        imul rax, rcx ; !! Never use "mul", always use "imul"
+        add rcx, 1 ; i++
+        checkLoop:
+        cmp rcx, rdi ; i<n
+        jl startLoop
+      add rdx, rax; add this factorial to the sum
+      add rsi, 1
+      checkOuter:  
+      cmp rsi, rdi
+      jle startOuter
+    mov rax, rdx ; return sum ; return product
+    ret ; return product because we are adding using rax
+    ```
+
+
 # Week-2
 [Top](#TOP)
 ### 2023-09-08
