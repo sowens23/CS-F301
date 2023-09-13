@@ -27,6 +27,55 @@ int main() {
 # Big Notes
 
 # Week-3
+### 2023-09-13
+  ##### Pointers
+  - rsp is the stack register, this aligns the push and pops
+    - You can 'add rsp, 8' which will add 8 bytes which is a 64 bit reference
+      - Essentially this is a pop, it 'removes' something off of the stack
+      - Push goes towards null pointer 0
+        - So push is technically a subtract of the stack register
+      - pop goes away from null pointer
+        - and pop is an addition to the stack register
+  - We can keep the stack 'clean' by noting the reference point
+    - rbp is a reserved register for you to save rsp on.
+    ```
+    push rbp ; save main's rbp
+    mov rbp, rsp ; save rsp
+    ; .... Bunch of crazy pops functions pushes
+    mov rsp, rp ; chop off my stack
+    pop rbp ; restore mains' rbp
+    ret
+    ```
+  - We can read the top of the stack in this way [rsp]
+    - The '[ ]' is used to de-reference a pointer address
+    ```
+    mov rax, [rsp] ; This will de-reference the rsp pointer to return it's register value
+    ```
+  - We can write to the top of the stack!
+    ```
+    push 5
+    mov rdx, rsp ; rdx points to the top of the stack
+    mov rcx, 8 
+    mov [rdx], rcx ; Re-writes pushed value 5 at the top of the stack, to 8
+    pop rax
+    ret
+    ``` 
+  - If we push an integer value, we must define the register size (long, int, etc.)
+    ```
+    mov QWORD[rdx], 3 ;
+    ```
+    | C Datatype | Bits | Bytes | Register | *ptr |
+    | ----- | ----- | ----- | ----- | ----- | 
+    | char | 8 | 1 | al | BYTE |
+    | short | 16 | 2 | ax | WORD |
+    | int | 32 | 4 | eax | DWORD |
+    | long | 64 | 8 | rax | QWORD |
+    | float | 32 | 4 | xmm0 | DWORD |
+    | double | 64 | 8 | xmm0 | QWORD |
+  - "Transporter Malfunction" "Splinched"
+    - If you are moving a pointer, you must move it by 8 bytes. NOT BY BITS
+    
+
 ### 2023-09-11
   ##### Recap and Why 'Assmebly'. Intro to Pointers
   - 8 bit signed int can reach about  billion
