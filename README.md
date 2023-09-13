@@ -74,7 +74,18 @@ int main() {
     | double | 64 | 8 | xmm0 | QWORD |
   - "Transporter Malfunction" "Splinched"
     - If you are moving a pointer, you must move it by 8 bytes. NOT BY BITS
+  - Referencing functions
+    ```
+    mov rcx, [x] ; You have just stored the bit value of the block of code 'x:'
+    ret
+
+    x:
+      mov rsi, 5
+      add rsi, 1
     
+    ```
+  - You can call a function 2 bytes after the memory address start of a function, you can essentially 'binary patch' yourself to skip parts of code that breaks things
+    - This is a brittle fix, but it can get your code running this week.
 
 ### 2023-09-11
   ##### Recap and Why 'Assmebly'. Intro to Pointers
