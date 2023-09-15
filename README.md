@@ -25,10 +25,83 @@ int main() {
   | [Week-3](#Week-3) | | |
 
 # Big Notes
+  ###### Shtuff
+    1) Write program.asm
+    2) Compile program "nasm -f elf64 -o program.o program.asm"
+    3) Link program "ld program.o -o program
+    4) Run program "./program"
 
 # Week-3
+### 2023-09-15 
+  ###### Pointer Arithmetic: Strings and Arrays
+  - foo is the 
+  - 'dq' is Define Quadword, this 
+    - dq 10 - is new line
+    - dq 32 - is a space
+    - 0x41 = 4x16 + 1 = 65
+    - 0x4142 = BA = Little 'Endian' We are looking at the little end first. the lowest byte is 42 thus B, then 41 for A
+  - in puts(const char *s); We can insert a whole string into a char, by using terminal characters between letters. Using a zero to terminate the string
+    - dq 0x4142; this keeps reading forever, past this value, till it hits zero and spits out BABABA~? then gibberish
+    - dq 0x41004241; this will print A, then B, then stop. Reading right, to left.
+  - call puts (This will take rdi as it's input and translate this into a string character till it hits 0)
+  - It will always look for a full 8 bytes, so if you only give it 4 bytes of information, it will fill in the remaining 4bytes with 0's which will effectively terminate the string output
+    ```
+    extern puts
+    mov rdi, thingInMemory
+    push
+    call puts
+    ret
+
+    thingInMemory:
+      dq 'babab', 0 ; Zero is needed here to terminate the string.
+      dq 'Hello world!', 10, 'New Line Inserted', 0 ;
+      ; In NetRun you can use 'backtick (`)' instead of quotations to use (\n)
+        ; dq `Hellow World!\n` ; Like this
+      ; dq 0x4142004241424142
+    ```
+    - String arithmetic in C++
+      ```
+      char string[] = "Hello horld";
+      char *p = string;
+      // p = p + 6; // Move pointer down
+      // *p = 'w'; // Assign to memory
+
+      // *(p+6) = 'W'; // I guess
+
+
+      // p[6] = 'W'; // Array access
+      // 6[p] = 'W'; // This works. Dont do it.
+      puts(string);
+      return 0;
+      ```
+    - String Arithmetic in Assembly
+      ```
+      mov r10, thingy
+      add r10, 8
+      mov rax, [r10]
+      ret // Returns 7
+      
+
+
+      thingy:
+        dq 5
+        dq 7
+        dq 9
+      ```
+      ```
+      mov rdi, 1
+      mov rax, [thingy+16*rdi] // In Assembly you can only multiply by factors of 2.
+      ret
+
+      thingy:
+        dq 5
+        dq 7
+        dq 9
+        dq 15
+      ```
+
 ### 2023-09-13
-  ##### Pointers
+  ###### Pointers
   - rsp is the stack register, this aligns the push and pops
     - You can 'add rsp, 8' which will add 8 bytes which is a 64 bit reference
       - Essentially this is a pop, it 'removes' something off of the stack
@@ -88,7 +161,7 @@ int main() {
     - This is a brittle fix, but it can get your code running this week.
 
 ### 2023-09-11
-  ##### Recap and Why 'Assmebly'. Intro to Pointers
+  ###### Recap and Why 'Assmebly'. Intro to Pointers
   - 8 bit signed int can reach about  billion
     - We can caluclate factorials up to 12, in an int.
     - Calculating in Hexidecimal (base 16) When you multiply by factors of 16, it shifts the hexidecimal value left, and puts a 0 on the end
