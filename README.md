@@ -19,16 +19,22 @@
 ### Big Notes
   - Compiling
     1. Write program.asm
-    2. Compile program "nasm -f elf64 -o program.o program.asm"
-    3. Link program "ld program.o -o program
-    4. Run program "./program"
+    2. Compile program: nasm -f elf64 -o *.o *.asm
+    3. Link program: ld *.o -o *
+    4. Run program: ./*
+  #### Scratch Registers
+    - Common 64-bit (long) scratch registers: rcx, rdx, rsi, rdi, r8 - r11
+    - Common 32-bit (int) scratch registers: ecx, edx, rsi, edi, r8d - r11d
+    - Common 16-bit (short) scratch registers: cx, dx, si, di, r8w - r11w
+    - Common 8-bit (char) scratch registers: ch/cl, dh/dl, sil, dil, r8b - r11b
 
-## Class Notes and Assignments
+# Class Notes and Assignments
   | Weekly Notes | Assignments | Other Notes |
   | --- | --- | --- |
-  | [Week-1](#Week-1) | [HW00](https://github.com/sowens23/CS-F301/blob/main/week1/hw00.cpp) | |
-  | [Week-2](#Week-2) | [HW01](https://github.com/sowens23/CS-F301/blob/main/week2/hw01.asm) | |
-  | [Week-3](#Week-3) | | |
+  | [Week-1](#Week-1) | [HW00](https://github.com/sowens23/CS-F301/tree/main/homework/hw00) | |
+  | [Week-2](#Week-2) | [HW01](https://github.com/sowens23/CS-F301/tree/main/homework/hw01) | |
+  | [Week-3](#Week-3) | [HW02](https://github.com/sowens23/CS-F301/tree/main/homework/hw02) | |
+  | [Week-4](#Week-4) | [HW03](https://github.com/sowens23/CS-F301/tree/main/homework/hw03) | |
 
 # Week-4
 [Top](#TOP)
