@@ -41,6 +41,85 @@
 ## 2023-09-22
 ## 2023-09-20
 ## 2023-09-18
+  ### Memory Allocation
+  - Hello World in Assembly
+    ```
+    push 3 ; Align stack
+    mov rdi, 0x41 ; H
+    mov rdi, 0x69 ; i
+    mov rdi, 0x0  ; Terminating zero
+    mov rdi, 0x69410 ; 'Hi' <-- This doesn't work because it's not a value IN memory, it is a memory address.
+
+    push 0x69410 ; This will work, but it's ugly.
+
+    sub rsp, 8 ; Allocating 8 bytes of stack space
+    mov BYTE [rsp+0], `H` ; Load byte 0 of string ; This literally overwrites the bytes of MAIN's address
+    mov BYTE [rsp+1], `i` ; Load byte 1 of string
+    mov BYTE [rsp+2], 0 ; terminating zero
+
+    mov rdi, rsp ; Points to string
+    extern puts
+    call puts
+
+    add rsp, 8 ; release stack space afterwards
+    ret
+    ```
+  - Modifying and Allocating Data String
+    ```
+    mov QWORD [myConst], 3
+    mov rax, QWORD[myConst]
+    ret
+
+    section .data ; Switching storage mode to modifiable data
+    myCOnst:
+      dq 1024
+    ```
+  | Name | Use | Discussion |
+  | --- | --- | --- |
+  | section .data | r/w data | This data is initialized, but can be modified |
+  | section .rodata | r/o data | This data can't be modified, which lets it be shared across copies of the program |
+  | section .bss | r/w space | This is automatically initialized to zero, meaning the contents don't need to be stored explicitly |
+  | section .text | r/o code | This is the program's executable machine code (it's binary data, not plain text!) |
+  - Allocating data
+    - C++ allocation and deallocation
+      ```
+      int *arr=new int[3];
+      arr[0]=5;
+      delete[] arr; // Without this you would have a memory leak
+      return arr[0];
+      ```
+    - Plain C allocation and deallocation
+      ```
+      int n = 3;
+      // For malloc, you must designate a specific amount of bits. If you specifically add 16, it will work for a 16 bit int
+      // But if you need to then use it for a 32 or 64-bit int, you'll be in trouble. So here we can dynamically assign it enough bits based on the sizeof function
+      int *arr = malloc(n*sizeof(int)); // You designate a specific amount of bits to an array pointer
+      arr[0]=5;
+      free(arr);
+      return arr[0];
+      ```
+    - Assembly allocation and deallocation
+      ```
+      mov rdi, 8 ; Allocate space to t
+      extern malloc
+      call malloc
+      ; rax = pointer to our allocated space
+      mov rdi, rax ; points to string
+      mov BYTE [rdi+0], `H` ; Load byte 0 of string
+      mov BYTE [rdi+1], `i` ; Load byte 1 of string
+      mov BYTE [rdi+2], 0 ; Load terminating zero to byte 2 of string
+
+      extern puts
+      push rdi ; Save pointer to stack
+      call puts
+      pop rdi ; restore pointer
+
+      ; BEWARE: release heap space afterwards
+      extern free
+      call free ; takes address as rdi, and releases 
+      ret
+      ```
+    - The difference between the HEAP and the STACK are simply the methods of allocation.
 
 # Week-3
 [Top](#TOP)
