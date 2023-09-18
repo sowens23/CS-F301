@@ -50,7 +50,7 @@ void part2 ()
 
 void part3 () {
 	// Take input from file per homework
-	std::ifstream inputFile("week1input/input03.txt");
+	std::ifstream inputFile("hw00input/input03.txt");
 	if (!inputFile) {
 		cout << "Failed to open file" << endl;
 	}
@@ -86,7 +86,7 @@ void part3 () {
 void part4 ()
 {
 	// Take input from file per homework
-	std::ifstream inputFile("week1input/input04.txt");
+	std::ifstream inputFile("hw00input/input04.txt");
 	if (!inputFile) {
 		cout << "Failed to open file" << endl;
 	}
@@ -135,7 +135,7 @@ void part4 ()
 
 long part5() {
 	// START: READ INPUT
-	std::ifstream inputFile("week1input/input05.txt");
+	std::ifstream inputFile("hw00input/input05.txt");
 	if (!inputFile) {
 		cout << "Failed to open file" << endl;
 	}
@@ -201,7 +201,7 @@ long part5() {
 
 void part6() {
 	// START: READ INPUT
-	std::ifstream inputFile("week1input/input06.txt");
+	std::ifstream inputFile("hw00input/input06.txt");
 	if (!inputFile) {
 		cout << "Failed to open file" << endl;
 	}
