@@ -40,6 +40,96 @@
 [Top](#TOP)
 ## 2023-09-22
 ## 2023-09-20
+  ### Class and Struct in Memory
+  - In C++ You can return the decimal value of a char `3` which would return 52
+    ```
+    char c = `c`;
+    return (int)(c-`0`); // This is not super effective, it'd be best to reference the standard library
+    ```
+  - Moving code around using pointers and the .section data
+    ```
+    mov rcx, 1 ; We'll use this an the array index
+    mov rax , [myArray+8*rcx]
+    ret ; This returns 123456
+
+    myArray:
+      dq 7        ; [0]
+      dq 123456   ; [1] 
+    ```
+  - More of the same fun, but instead of simply reading, we can write.
+    ```    
+    mov rcx, 2 ; We'll use this an the array index
+    mov rax , [myArray+8*rcx] ; read arr[i]
+    mov QWORD[myArray+8*rcx], 3 ; write arr[i]
+    ret ; This returns 123456
+
+    section .data
+    myArray:
+      dq 7        ; [0]
+      dq 123456   ; [1] 
+      dq 0x1c0de  ; [2]
+    ```
+  - Demo of class and struct (C++ implemented 'classes')
+    - Classes - Objects and other stuff in a class are deemed private unless otherwise stated
+    - Struct - By default things are all public
+    - These are totally and absolutely interchangable. You can swap "class" with "struct" as you want
+  - Demo of string in Assembly
+    ```
+    ; Input: rdi points to a std::string
+    ; We put in "Hello!"
+    mov rax, rdi 
+    mov rax, QWORD[rdi] ; First thing in std::string: pointer to chars;
+    mov BYTE[rdi+1],`a` ; Replaces the second byte of the string from `e` to `a`
+    extern puts
+    call puts ; Input is modified RDI
+    ret ; Output RDI: "Hallo!"
+    ```
+    ```
+    ; Input: rdi points to a std::string
+    ; We put in "Hello!"
+    mov rax, QWORD[rdi] ; First thing in std::string: pointer to chars; 0x912312903801928
+    mov rdx, QWORD[rdi+8] ; Second thing in std::string: number of chars; 6
+    mov rax, QWORD[rdi+16] ; Third thing in std::string: string data (If less than 16 chars?); 0x216F6C6C6548
+    ret
+    ```
+  - Let's play a choose your own adventure
+    ```
+    push rbp ; save main's rbp
+    mov rbp,startState
+
+    print:
+      mov rdi,QWORD[rbp] ; load string for this state
+      extern puts
+      call puts
+      
+      mov rbp,QWORD[rbp+8] ; load next for this state
+      cmp rbp,0
+      je end
+      jmp print
+
+    end:
+    pop rbp ; restore main's rbp
+    ret
+
+    startState:
+      dq myString
+      dq nextState
+    myString:
+      db `You are sitting in a classroom.`,0
+
+    nextState:
+      dq nextString
+      dq endState
+    nextString:
+      db `The class is almost over!`,0
+
+    endState:
+      dq endString
+      dq 0
+    endString:
+      db `The class is now over!`,0
+    ```
+
 ## 2023-09-18
   ### Memory Allocation
   - Hello World in Assembly
