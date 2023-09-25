@@ -17,7 +17,7 @@
   - [UAF CS Netrun](https://lawlor.cs.uaf.edu/netrun/run)
 
 ### Big Notes
-  - Compiling
+  #### Compiling
     1. Write program.asm
     2. Compile program: nasm -f elf64 -o *.o *.asm
     3. Link program: ld *.o -o *
@@ -35,6 +35,126 @@
   | [Week-2](#Week-2) | [HW01](https://github.com/sowens23/CS-F301/tree/main/homework/hw01) | |
   | [Week-3](#Week-3) | [HW02](https://github.com/sowens23/CS-F301/tree/main/homework/hw02) | |
   | [Week-4](#Week-4) | [HW03](https://github.com/sowens23/CS-F301/tree/main/homework/hw03) | |
+  | [Week-5](#Week-5) | [HW04](https://github.com/sowens23/CS-F301/tree/main/homework/hw04) | |
+
+# Week-5
+[Top](#TOP)
+## 2023-09-25
+  ### Buffer overflow attack intro
+  - Buffer overflow error, what happens when the name is longer than 8 characters.
+    - Here we will overwrite the next bites after name. Which are the permissions!!!
+    - This is also a pretty common way to create strings in C
+    ```
+    struct student {
+      char name[8];
+      long permissions; // bit 0: supervisor
+    }
+
+    long foo(void) {
+      struct student s;
+      s.permissions=0;
+      std::cin>>s.name;
+      std::cout<<"Hello " << s.name << "\n";
+      return s.permissions;
+    }
+    ```
+  - Let's continue testing this with permissions in private section
+    - Even if we put the permissions in the private section, this is still at risk for buffer overflow error!
+    - Even if we make everything, **everything** private (just the class member variables). We will still have the same issue.
+    - The way to prevent this comes through a few steps
+    ```
+    class student {
+    public:
+      char name[8];
+      long get_permissions() const {
+        return permissions;
+      }
+    private:
+      long permissions; // bit 0: supervisor
+    }
+
+    long foo(void) {
+      struct student s;
+      s.permissions=0;
+      std::cin>>s.name;
+      std::cout<<"Hello " << s.name << "\n";
+      return s.permissions;
+    }
+    ```
+  - The way to prevent this comes through a few steps
+    - We need something that is designed to store a string 
+    - Using the string interface will prevent this from happening, however. You must be warned that even if you take in a string, and then pack the *string[0] length into a character pointer, you will run into a buffer overflow error again if the length of the string is greater than the character pointer memory capacity.
+  - Essentially, never trust user input. Consider all possible inputs.
+  - zero_canary=0 ; Essentially, you can put this in as a class member variable, and before executing weird code like a self destruct, you can verify that zero_canary equals zero. If the canaray is not zero, the mine is not safe.
+    ```
+    const int max_dest_list_length=4;
+    struct robot dest {
+      long dest[max_dest_list_length];
+      long zero_canary; // Got the be zero
+      long self_destruct;
+    };
+
+    long foo(void) {
+      robot_dest d;
+      d.zero_canary=0xc0de;
+      d.self_destruct=0;
+
+      int i=0;
+      while (cin>>d.dest[i]) i++;
+      
+      if (d.zero_canary!=0xc0de) {
+        std::cout<<"Canary should be zero: buffer overflow?\n";
+        exit(1);
+      }
+      return d.self_destruct;
+    }
+    ```
+  - Stack smashing, total issue here.
+    ```
+    // If we input something greater than the memory size we will stack smash
+    // ex. aaaAAAAbbbbBBBB -> *** stack smashing detected ***: terminated
+    char name[8];
+    std::cin>>name;
+    return 0;
+    ```
+  - We can find the pointer
+    ```
+    char name[8];
+    char *p = &name[0];
+    std::cout << (int *)p; << "\n"; // This will show you the stack point
+    ```
+    - This will show you a random address every time you output this. This is because the stack pointer actually changes as programs run, it's partially randomized for security purposes.
+  - Make damn sure when you use an array, you know the length, and prevent it from running off the end.
+  - In Assembly!
+    ```
+    push rbp
+    ; Allocate an array
+    mov rdi, 4*8 ; 4 bytes
+    extern malloc
+    call malloc
+    ; rax points to our 32 bytes
+    mov rbp, rax ; rbp points to our array
+
+    mov QWORD[rbp+3*8],3
+
+    ; Print data
+    extern larray_print
+    mov rdi, rax
+    mov rsi, 4
+    
+
+    call larray_print
+
+
+    ; Free buffer
+    mov rdi, rbp
+    extern free
+    call free
+
+    pop rbp
+    ret
+    ```
+  
 
 # Week-4
 [Top](#TOP)
