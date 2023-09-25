@@ -39,6 +39,80 @@
 # Week-4
 [Top](#TOP)
 ## 2023-09-22
+  ### Function Pointers
+  - Let's look at a linked list in C
+    - * Dereferenced a pointer
+    - -> Dereferences a pointer
+    - & This takes the pointer of an object
+    - && R value references
+  - 
+    ```
+    push rbp
+    mov rdi, foo
+    mov rsi, 2
+    extern larray_print ; rdi: pointer to array of longs, rsi: number of longs
+    call larray_print
+    ret
+
+    myArr:
+      dq 5
+      dq 3
+    ```
+    ```
+    // Not completed code.
+    struct linked_list {
+      long id; // the data in this link: one student ID
+      struct linked_list *next // the next node, or NULL if none
+    }
+
+    struct linked_list end={567,0}; // We would like to declare the end of the list first
+    struct linked_list first={123,&end}; // First link on list
+
+    struct linked_list *cur = &first; //
+    while (cur != NULL) {
+      std::cout <<cur->id
+    }
+    ```
+  - Here we have an array of functions that takes in an input, that will designate what step of the process we should 
+    ```
+    ; rdi: step this customer is on
+    mov rcx,QWORD[tableOfFunctions + 8*rdi]
+    jmp rcx
+
+
+    tableOfFunctions: ; array of pointers (8 bytes each) to code
+      dq step0
+      dq step1
+      dq step2
+      dq step3
+
+    step0:
+      mov rax,123
+      ret
+
+    step1:
+      mov rdi,helloString
+      extern puts
+      call puts
+      ret
+
+    step2:
+      mov rdi,errString
+      extern puts
+      call puts
+      ret
+
+    step3:
+      jmp step2
+
+    helloString:
+      db 'hello!',0
+    errString:
+      db 'oh noes!!!',0
+
+    ```
+
+
 ## 2023-09-20
   ### Class and Struct in Memory
   - In C++ You can return the decimal value of a char `3` which would return 52
