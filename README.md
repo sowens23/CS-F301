@@ -39,6 +39,58 @@
 
 # Week-5
 [Top](#TOP)
+## 2023-09-27
+  ### printf: output in C or Assembly
+  - We can 
+    - %0 = Leading zero
+    - %d = print decimal
+    - In C: You are susceptible
+    ```
+    Input: attacker_RSI=%016X_rdx=%016X_rcx=%016X_r8=%016X_r9=%016X_stack0=%016X_
+    
+    const char *p
+    std::string s;
+    std::cin >> s;
+
+    printf(s)
+    ```
+
+    ```
+    const int buflen=100;
+    char buf[buflen];
+    const char *p="world"
+    snprintf(buf, buflen, "Hello %s!", p)
+    puts(buf);
+    return 0;
+    ```
+  - Changing strings in C++
+    ```
+    std::string s;
+    int x=15, y=15;
+    std::cout<<std::hex
+      <<std::setw(8)<<std::setfill('0')<<x<<","
+      <<std::setw(8)<<y<<std::dec<<stD::setfill(' '
+    ```
+  - Changing strings in Assembly
+    ```
+    push rbp ; Align stack
+    mov rax, 2
+    add rax, 2
+
+    extern printf
+    mov rdi, formatString ; format for printf
+    mov rsi, rax ;
+    mov al, 0 ; number of vector registers you're passing
+    call printf ;
+
+    pop rbp; restore
+    ret
+
+    formatString:
+      db `Answer = %d\n`,0
+    ```
+  
+
 ## 2023-09-25
   ### Buffer overflow attack intro
   - Buffer overflow error, what happens when the name is longer than 8 characters.
