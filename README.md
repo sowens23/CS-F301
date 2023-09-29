@@ -39,6 +39,64 @@
 
 # Week-5
 [Top](#TOP)
+## 2023-09-29
+  ### Linking C/C++ and Assembly together
+  - Before a function in a c++ program, you can mark it as "extern C" so that it's interface can be read in C
+  ```
+  extern "C"
+  long doCoolStuff(const char *stuff) {
+  ...
+  }
+  ```
+  - How a specific language is linked to it's executable.
+    | Input | Output |Name | Programs |
+    | --- | --- | --- | --- |
+    | .cpp | .obj | C++ compiler | g++, clang++, cl |
+    | .c | .obj | C compiler | gcc, clang, cl /TC |
+    | .S | .obj | Assembler | nasm, gas, masm |
+    | Several .obj files | One .exe | Linker | ld |
+
+    (Although it's more common to call it via the compiler.)
+
+  - Python and Java do not use a .obj files for linking
+
+  - You can compile both C and Assembly code together!
+    1. asmcool.S: nasm -f elf64 asmcool.S: g++ main.o asmcool.o: ./a.out
+    ```
+    global doCoolStuff
+    doCoolStuff
+    ; argument: rdi is char * string to print
+    push rbp
+
+    extern printf
+    mov rsi, rdi
+    mov rdi, formatString
+    mov al, 0
+    call printf
+
+    pop rbp
+    ret
+
+    formatString:
+      db `Cool stuff: %s\n`, 0
+    ```
+
+    ```
+    #include <stdio.h>
+
+    long doCoolStuff(const char *);
+
+    int main() {
+      printf("Started C successfully);
+      return doCoolStuff;
+    }
+    ```
+
+    - How to compile shit in Windows
+      - You have to run the Native Tools Command Prompt for VS Code
+      - 
+
+
 ## 2023-09-27
   ### printf: output in C or Assembly
   - We can 
