@@ -37,6 +37,90 @@
   | [Week-4](#Week-4) | [HW03](https://github.com/sowens23/CS-F301/tree/main/homework/hw03) | |
   | [Week-5](#Week-5) | [HW04](https://github.com/sowens23/CS-F301/tree/main/homework/hw04) | |
 
+# Week-6
+
+## 2023-10-02
+  ### Making a stack from scratch
+  - AAA.asm
+    ```
+    global doAsmStuff
+
+    doAsmStuff
+      push rbp ; save main's rb to main's stack
+      mov rbp, rsp ; save main's stack to main's rbp
+
+      mov rsp, newStackEnd
+      extern puts
+      mov rdi, thingToPrint
+      call puts
+
+      mov rsp, rbp ; restore main's stack to main's rbp
+      pop rbp ; restores main's rb to main's stack
+      mov rax, QWORD[canary]
+      ret
+
+    thingToPrint:
+      db `We live!`, 0
+
+    section .data align=16;
+    canary:
+      dq 123
+      dq 0 ; align the new stack!
+    newStack:
+      times 1024 dq 0 ; 8 Kb of space for new stack
+    newStackEnd:
+    ```
+  - AAA_main
+    ```
+    extern "c" long doAsmStuff(void);
+    
+    long foo(void) {
+      return doAsmStuff();
+    }
+    ```
+
+  - Writing assembly from Windows (Update compile properties to create .obj)
+    - Remember to allocate 32 bytes for the shadow space
+    ```
+    section .test
+    global runAsmStuff
+    runAsmStuff:
+      ; function parameter in rcx (windows!)
+      mov QWORD[rsp+8], 1234 ; Move stuff into the shadow space
+
+      sub rsp, 32+8 ; Align the stack and allocate shadow space
+
+      mov rcx, helloMessage
+      mov rdx, 3
+      mov r8. 4
+      mov r9, 5
+      push 6
+      pop
+      extern printf
+      call printf
+
+      add rsp, 32+8; restore the stack
+      ret
+
+      helloMessage:
+        db `hello from asm printf: rdx = %llx r8 = %llx r9 = %llx stack0 = %llx \n`, 0
+        ; When you call %x, printf will return a 32 bit integer, so we need to use
+        ;   '%llx' instead of '%x' to get the full bit value of these integers
+        
+
+    ```
+    ```
+    #include <iostream>
+
+    extern "C" long runAsmStuff(long num);
+
+    int main () {
+      printf("Hello from printf?\n");
+      std::cout << "Hello!\n";
+      long v = runAsmStuff(11);
+    }
+    ```
+
 # Week-5
 [Top](#TOP)
 ## 2023-09-29
