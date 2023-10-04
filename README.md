@@ -38,6 +38,47 @@
   | [Week-5](#Week-5) | [HW04](https://github.com/sowens23/CS-F301/tree/main/homework/hw04) | |
 
 # Week-6
+## 2023-10-04
+  - In C family languages, including C++, you can intercept memory allocation calls by overriding your own "malloc" and "free".  There are many ways to write this, such as this simple stack-inspired buffer, which is nice and simple, but only works for very short programs.
+    - The basic idea is we'll preallocate a big memory buffer at startup with nothing in it.
+    - This will be our stuff to do with as we please. 
+  ```
+  ; Save old stack
+push rbp
+mov rbp,rsp ; save old stack pointer into rbp
+
+; Allocate buffer to store new stack (malloc?)
+mov rdi,QWORD[sizeOfNewStack] ; number of bytes to allocate
+extern malloc
+call malloc
+; rax = pointer to start of the new stack
+
+; Start using new stack
+add rax,QWORD[sizeOfNewStack]
+mov rsp,rax
+
+; Test out new stack
+mov rdi,7
+extern print_long
+call print_long
+
+; Find buffer so we can later call free
+mov rdi, rsp ; bring back stack pointer
+sub rdi,QWORD[sizeOfNewStack]; <- back to malloc top of buffer
+
+; Restore old stack
+mov rsp,rbp ; back to old stack
+pop rbp 
+
+; Call free to get rid of the stack
+extern free
+call free
+
+ret
+
+sizeOfNewStack: ; size in bytes of new stack (needs to be a multiple of 16)
+	dq 8000000
+```
 
 ## 2023-10-02
   ### Making a stack from scratch
