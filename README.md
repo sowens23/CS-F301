@@ -38,47 +38,107 @@
   | [Week-5](#Week-5) | [HW04](https://github.com/sowens23/CS-F301/tree/main/homework/hw04) | |
 
 # Week-6
+[Top](#TOP)
+## 2023-10-06
+  - [OpCodes](https://www.sandile.org/x86/)
+  - x86 Op Codes can be used to simplify a chain of commands using machine code!
+    ```
+    db 0x57 ; push rdi
+    db 0x58 ; pop rax
+    db 0xc3 ; ret
+    ```
+  - We can send strings of these Op Codes to execute functions
+    ```
+    ;jmp rdi ; We will jump to the rdi, as if it was an address
+    ; Here we are reading in an input into rdi
+    jmp codeAsNumber
+
+    codeAsCode:
+      push rdi
+      pop rax
+      ret
+
+    codeAsBytes:
+      db 86 
+      db 88 
+      db 155
+
+    codeAsString:
+      db `\x57\x58\xc3`
+
+    codeAsNumber:
+      dq 0xc35857
+    ```
+
+    ```
+    mov QWORD[codeArea], rdi
+
+    extern mprotect
+    mov rdi, codeArea ; pointer
+    mov rsi, 4096 ; bit size
+    mov rdx, 7 ; rdx is set to 7, which should be readable, writable, and executable
+    call mprotect ; Pass pointer, size (4096), permissions
+
+    mov rdi, 9
+    call codeArea
+    ret
+
+    section .data align=4096 ; Puts this pointer in multiples of 4096, which is the size of a "page"?
+    codeArea:
+      dq 0
+    ```
+  - The Sapphire/Slammer Work: Was a chain of assembly language that spread over the entire world in 30 minutes. When the packet lands in an unpatched SQL Server, it starts to run over and over, and it send it out to all computer network resources. [The Spread of the Sapphire/Slammer Worm](https://www.caida.org/catalog/papers/2003_sapphire/)
+  - Let's execute code on the stack
+    ```
+    mov rdx,0xc300000003b8 ; machine code
+    push rdx ; put it on the stack
+    mov BYTE[rsp+1],7 ; change constant
+    mov rax,rsp ; save pointer to our code
+    pop rcx ; clean stack
+    jmp rax ; run our code!
+    ```
+
 ## 2023-10-04
   - In C family languages, including C++, you can intercept memory allocation calls by overriding your own "malloc" and "free".  There are many ways to write this, such as this simple stack-inspired buffer, which is nice and simple, but only works for very short programs.
     - The basic idea is we'll preallocate a big memory buffer at startup with nothing in it.
     - This will be our stuff to do with as we please. 
-  ```
-  ; Save old stack
-push rbp
-mov rbp,rsp ; save old stack pointer into rbp
+    ```
+    ; Save old stack
+    push rbp
+    mov rbp,rsp ; save old stack pointer into rbp
 
-; Allocate buffer to store new stack (malloc?)
-mov rdi,QWORD[sizeOfNewStack] ; number of bytes to allocate
-extern malloc
-call malloc
-; rax = pointer to start of the new stack
+    ; Allocate buffer to store new stack (malloc?)
+    mov rdi,QWORD[sizeOfNewStack] ; number of bytes to allocate
+    extern malloc
+    call malloc
+    ; rax = pointer to start of the new stack
 
-; Start using new stack
-add rax,QWORD[sizeOfNewStack]
-mov rsp,rax
+    ; Start using new stack
+    add rax,QWORD[sizeOfNewStack]
+    mov rsp,rax
 
-; Test out new stack
-mov rdi,7
-extern print_long
-call print_long
+    ; Test out new stack
+    mov rdi,7
+    extern print_long
+    call print_long
 
-; Find buffer so we can later call free
-mov rdi, rsp ; bring back stack pointer
-sub rdi,QWORD[sizeOfNewStack]; <- back to malloc top of buffer
+    ; Find buffer so we can later call free
+    mov rdi, rsp ; bring back stack pointer
+    sub rdi,QWORD[sizeOfNewStack]; <- back to malloc top of buffer
 
-; Restore old stack
-mov rsp,rbp ; back to old stack
-pop rbp 
+    ; Restore old stack
+    mov rsp,rbp ; back to old stack
+    pop rbp 
 
-; Call free to get rid of the stack
-extern free
-call free
+    ; Call free to get rid of the stack
+    extern free
+    call free
 
-ret
+    ret
 
-sizeOfNewStack: ; size in bytes of new stack (needs to be a multiple of 16)
-	dq 8000000
-```
+    sizeOfNewStack: ; size in bytes of new stack (needs to be a multiple of 16)
+    dq 8000000
+    ```
 
 ## 2023-10-02
   ### Making a stack from scratch
@@ -170,7 +230,6 @@ sizeOfNewStack: ; size in bytes of new stack (needs to be a multiple of 16)
   ```
   extern "C"
   long doCoolStuff(const char *stuff) {
-  ...
   }
   ```
   - How a specific language is linked to it's executable.
