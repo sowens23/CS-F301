@@ -8,13 +8,17 @@
   }
   ```
 
-### Class Repositories and References
+### Class Repositories
   - [sowens23-GitHub](https://github.com/sowens23)
   - [GitHubPortal](https://github.com/sowens23/Newbie-Gains/blob/main/README.md)
   - [CS-F301 Class Homepage](https://docs.google.com/document/d/e/2PACX-1vTJJ1vxMtlhlFUd6GlIUGHZ9jElR95Tau21rUKf_HHHFdelLhEW6GRo9WlRi08CCHe5xkdo8Mpw11UM/pub)
-  - [CS-F301 Class Recordings](https://www.google.com/url?q=https://docs.google.com/document/d/1OBlNDWjTrCQqKWx69IEePGC9RmEBhUOiR2o07ZWzIeU/edit&sa=D&source=editors&ust=1694312255234741&usg=AOvVaw0NK7nI30MXzI07lNPPP_jw)
-  - [Assembly CheatSheet](https://docs.google.com/document/d/1hwABu-SL6u2cdhVkjOCUU6T0UyALujep1NfwYfQzWSo/edit)
   - [UAF CS Netrun](https://lawlor.cs.uaf.edu/netrun/run)
+
+### Assembly/C# References
+  - [Assembly CheatSheet](https://docs.google.com/document/d/1hwABu-SL6u2cdhVkjOCUU6T0UyALujep1NfwYfQzWSo/edit)
+  - [printf reference](https://cplusplus.com/reference/cstdio/printf/)
+  - [OpCodes](https://www.sandile.org/x86/)
+
 
 ### Big Notes
   #### Compiling
@@ -36,11 +40,24 @@
   | [Week-3](#Week-3) | [HW02](https://github.com/sowens23/CS-F301/tree/main/homework/hw02) | |
   | [Week-4](#Week-4) | [HW03](https://github.com/sowens23/CS-F301/tree/main/homework/hw03) | |
   | [Week-5](#Week-5) | [HW04](https://github.com/sowens23/CS-F301/tree/main/homework/hw04) | |
+  | [Week-6](#Week-6) | [HW05](https://github.com/sowens23/CS-F301/tree/main/homework/hw05) | |
+  | [Week-7](#Week-7) | | |
+
+
+# Week-7
+[Top](#TOP)
+## 2023-10-06
+  - Spent time reviewing stuff that will be on the Midterm
+  - Final project dates
+    - Discover project topic by 2023-10-13
+    - Project background presentation 2023-10-30
+    - Project proof of concept 2023-11-15
+    - Project presentation 2023-12-6
+    - Final code and technical blog post 2023-12-15
 
 # Week-6
 [Top](#TOP)
 ## 2023-10-06
-  - [OpCodes](https://www.sandile.org/x86/)
   - x86 Op Codes can be used to simplify a chain of commands using machine code!
     ```
     db 0x57 ; push rdi
