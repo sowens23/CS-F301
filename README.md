@@ -15,6 +15,8 @@
   - [UAF CS Netrun](https://lawlor.cs.uaf.edu/netrun/run)
 
 ### Assembly/C# References
+  - [x86 CheatSheet](https://docs.google.com/document/d/1hwABu-SL6u2cdhVkjOCUU6T0UyALujep1NfwYfQzWSo/edit)
+  - [ARM CheatSheet](https://docs.google.com/document/d/1ozon1FnGTX7LZFA1JKBaXTrAZxlJNj0jMzrKgaUd_zA/edit#heading=h.8lf08sx6cr75)
   - [Assembly CheatSheet](https://docs.google.com/document/d/1hwABu-SL6u2cdhVkjOCUU6T0UyALujep1NfwYfQzWSo/edit)
   - [printf reference](https://cplusplus.com/reference/cstdio/printf/)
   - [OpCodes](https://www.sandile.org/x86/)
@@ -42,7 +44,50 @@
   | [Week-5](#Week-5) | [HW04](https://github.com/sowens23/CS-F301/tree/main/homework/hw04) | |
   | [Week-6](#Week-6) | [HW05](https://github.com/sowens23/CS-F301/tree/main/homework/hw05) | |
   | [Week-7](#Week-7) | | |
+  | [Week-8](#Week-7) | | |
 
+
+# Week-8
+[Top](#TOP)
+## 2023-10-30
+## 2023-10-28
+## 2023-10-26
+  - Differenes between x86 and Arm64! Arm64 is way more energy efficient, keeps all registers to 32/16 its, so there is a lot of energy saved by not needing to run strange protocols to make sure everything is aligned correctly.
+    ```
+    ; Add is a 3 parameter operation
+    mov x3, 7
+    add x0, x3, 10
+    ; returns x0
+    ret
+    ```
+  - Arm does not access memory, so you cannot mov x0, [bigConst]
+    ```
+    mov x0, 0x10000
+    adr x6, bigConst // Loads value of bigConst into register
+    ldr x5, [x6] // access memory
+    add x0, x3, x5
+    str x0, [x6] // write to memory (needs .data permission)
+    ret
+
+    .data
+    bigConst:
+      .8byte 0xc0dec0ffee
+    ```
+  - Arm64 Push and Popping
+    - You can push, without popping in Arm64
+    - 
+    ```
+    mov x3, 13
+    // The following line, is store pair, because you have to align the stack by 16 bytes.
+    // So we are preserving registers x3, and x30(lr), and moving the lr down by 16 bytes.
+    stp x3, lr, [sp, -16]! // (push) via preecrement
+
+    mov x0, 123
+    bl print_long // (trashed x30(lr), your stack pointer)
+
+    ldp x0, lr, [sp], 16 // post incremement (pop)
+    ret
+    ```
 
 # Week-7
 [Top](#TOP)
