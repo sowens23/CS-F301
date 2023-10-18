@@ -51,8 +51,36 @@
 [Top](#TOP)
 ## 2023-10-30
 ## 2023-10-28
+  - We talked about threading. How CPU's will look into future code in search of dependencies, this will help the CPU know which calculations can be done simultaniously. 
+  - 
+    ```
+    mov x9, 1000
+    adr x8, tableOfBranches
+    ldr, x5, [x8] // branch if 1, don't if 0
+
+    mov x0, 0 // return value
+    start:
+      ror x5, x5, 1 // shift bits of x5 in a cicle
+      and x4, x5, 1 // extract low bt of x5
+      cmp x4, 1
+      b.eq didBranch
+
+        add x0, x0, 123
+
+      didBranch:
+
+      sub x9, x9, 1
+      cmp x9, 0
+      b.gt start
+
+    ret
+
+    tableOfBranches:
+      .8byte 0xdeadbeefcaffeef0 // 0x
+    ```
+
 ## 2023-10-26
-  - Differenes between x86 and Arm64! Arm64 is way more energy efficient, keeps all registers to 32/16 its, so there is a lot of energy saved by not needing to run strange protocols to make sure everything is aligned correctly.
+  - Differences between x86 and Arm64! Arm64 is way more energy efficient, keeps all registers to 32/16 its, so there is a lot of energy saved by not needing to run strange protocols to make sure everything is aligned correctly.
     ```
     ; Add is a 3 parameter operation
     mov x3, 7
