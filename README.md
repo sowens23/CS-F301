@@ -50,6 +50,8 @@
 # Week-8
 [Top](#TOP)
 ## 2023-10-30
+  - Talked about ARM, x86, and ??? float types, and type conversion!
+  
 ## 2023-10-28
   - We talked about threading. How CPU's will look into future code in search of dependencies, this will help the CPU know which calculations can be done simultaniously. 
   - 
