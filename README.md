@@ -37,22 +37,27 @@
 # Class Notes and Assignments
   | Weekly Notes | Assignments | Other Notes |
   | --- | --- | --- |
-  | [Week-1](#Week-1) | [HW00](https://github.com/sowens23/CS-F301/tree/main/homework/hw00) | |
-  | [Week-2](#Week-2) | [HW01](https://github.com/sowens23/CS-F301/tree/main/homework/hw01) | |
-  | [Week-3](#Week-3) | [HW02](https://github.com/sowens23/CS-F301/tree/main/homework/hw02) | |
-  | [Week-4](#Week-4) | [HW03](https://github.com/sowens23/CS-F301/tree/main/homework/hw03) | |
-  | [Week-5](#Week-5) | [HW04](https://github.com/sowens23/CS-F301/tree/main/homework/hw04) | |
-  | [Week-6](#Week-6) | [HW05](https://github.com/sowens23/CS-F301/tree/main/homework/hw05) | |
-  | [Week-7](#Week-7) | | |
-  | [Week-8](#Week-7) | | |
+  | [Week-1](#Week-1) | [HW00](https://github.com/sowens23/CS-F301/tree/main/homework) | |
+  | [Week-2](#Week-2) | [HW01](https://github.com/sowens23/CS-F301/tree/main/homework) | |
+  | [Week-3](#Week-3) | [HW02](https://github.com/sowens23/CS-F301/tree/main/homework) | |
+  | [Week-4](#Week-4) | [HW03](https://github.com/sowens23/CS-F301/tree/main/homework) | |
+  | [Week-5](#Week-5) | [HW04](https://github.com/sowens23/CS-F301/tree/main/homework) | |
+  | [Week-6](#Week-6) | [HW05](https://github.com/sowens23/CS-F301/tree/main/homework) | |
+  | [Week-7](#Week-7) | [HW06](https://github.com/sowens23/CS-F301/tree/main/homework) | |
+  | [Week-8](#Week-8) | | |
+  | [Week-8](#Week-9) | | |
 
+# Week-9
+[Top](#TOP)
+## 2023-10-23
+  - Floats and round-off arithmetic is fucked. Use multiples of 2, when adding fractions LOL 
 
 # Week-8
 [Top](#TOP)
-## 2023-10-30
+## 2023-10-20
   - Talked about ARM, x86, and ??? float types, and type conversion!
   
-## 2023-10-28
+## 2023-10-18
   - We talked about threading. How CPU's will look into future code in search of dependencies, this will help the CPU know which calculations can be done simultaniously. 
   - 
     ```
@@ -81,7 +86,7 @@
       .8byte 0xdeadbeefcaffeef0 // 0x
     ```
 
-## 2023-10-26
+## 2023-10-16
   - Differences between x86 and Arm64! Arm64 is way more energy efficient, keeps all registers to 32/16 its, so there is a lot of energy saved by not needing to run strange protocols to make sure everything is aligned correctly.
     ```
     ; Add is a 3 parameter operation
@@ -121,7 +126,9 @@
 
 # Week-7
 [Top](#TOP)
-## 2023-10-06
+## 2023-10-13
+## 2023-10-11
+## 2023-10-09
   - Spent time reviewing stuff that will be on the Midterm
   - Final project dates
     - Discover project topic by 2023-10-13
