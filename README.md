@@ -49,6 +49,8 @@
 
 # Week-9
 [Top](#TOP)
+## 2023-10-25
+  - 
 ## 2023-10-23
   - Floats and round-off arithmetic is fucked. Use multiples of 2, when adding fractions LOL 
 
