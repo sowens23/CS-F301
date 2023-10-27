@@ -49,10 +49,56 @@
 
 # Week-9
 [Top](#TOP)
+## 2023-10-27
+  - Let's scale an array?
+    ```c++
+    const int N=8192; // length of data
+    float in_data[8192]={100.0,200.0,300.0,400.0};
+    float out_data[8192];
+
+    // out_data[i] = in_data[i] * scale for i in 0...N-1
+    extern "C"
+    void scale_array(const float *in_data, float *out_data, 
+      long N, float scale);
+
+    float foo() {
+      scale_array(in_data, out_data, N, (float)(1.0 / sqrt(N)));
+      /*
+      for (int i=0;i<N;i++)
+        out_data[i] = in_data[i] * (float)(1.0 / sqrt(N));
+      */
+      return out_data[0];
+    }
+    ```
+  - Assmebly linked file to run program. This is used to increase speed/efficiency of program
+    ```assembly
+    ; // out_data[i] = in_data[i] * scale for i in 0...N-1
+    ; extern "C"
+    ; void scale_array(const float *in_data = *rdi, float *out_data in *rsi, 
+    ;  long N in rdx, float scale in xmm0);
+    .text
+    global scale_array
+    scale_array:
+      mov rcx, 0 ; i=0
+      start:
+        mov rcx, 0 ; i=0
+        start:
+          vmovss xm22, [rdi + 4*rcx] ; load src[i]
+          vmulss xmm2, xmm2, xmm0 ; scale
+          vmovss [rsi + 4*rcx], xmm2 ; store dest[i]
+
+        add rcx, 1 ; i++
+        cmp rcx, rdx; i<N
+        jl start
+    ```
 ## 2023-10-25
-  - 
+  - Flipping some bits using a bitwise operator and a mask!
+  ```c++
+  long base = 0x32100123333333;
+  long flip = 0x0x000111001100;
+  return base ^ flips;
+  ```
 ## 2023-10-23
-  - Floats and round-off arithmetic is fucked. Use multiples of 2, when adding fractions LOL 
 
 # Week-8
 [Top](#TOP)
