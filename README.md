@@ -50,6 +50,42 @@
 
 # Week-10
 [Top](#TOP)
+## 2023-11-01
+  - Understanding how to utilize threads. There is a 'thread' header. But some functions can not be shared very well.
+    - Like std::cout in the code below, it will print something different everytime, because the thread, and main are fighting for cout.
+    - A thread's stack will be pretty far away from the main stack.
+    - You want most IO operations to happen on the same thread for this reason.
+    - It's totally okay to read global values from multiple threads,
+      - but there is an issue when a thread is changing the variable in which other threads are dependent on.
+    - Generally, never use global variables 
+    ```c++
+    #include <thread>
+
+    std::vector<int> g;
+    std::mutex lock_g;
+
+    void otherFunction(void) {
+      for (int i=0;i<10000;i++) {
+        // RAII
+        std::lock_guard<std::mutex> guard(lock_g);
+        //lock_g.lock();
+        g.push_back(i);
+        lock_g.unlock();
+      }
+    }
+
+    long foo (void) {
+      std::thread myThread(otherFunction);
+      for (int i=0;i<10000;i++) {
+        lock_g.lock();
+        g.push_back(i);
+        lock_g.unlock();
+      }
+      myThread.join(); // Finish running thread before exit
+      return 0;
+    }
+    ```
+  - Threads are tricky to get to use together.
 ## 2023-10-30
   - Bitwise Continued
 
