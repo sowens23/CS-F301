@@ -45,7 +45,13 @@
   | [Week-6](#Week-6) | [HW05](https://github.com/sowens23/CS-F301/tree/main/homework) | |
   | [Week-7](#Week-7) | [HW06](https://github.com/sowens23/CS-F301/tree/main/homework) | |
   | [Week-8](#Week-8) | | |
-  | [Week-8](#Week-9) | | |
+  | [Week-9](#Week-9) | | |
+  | [Week-10](#Week-10) | | Project Proposal Presentation |
+
+# Week-10
+[Top](#TOP)
+## 2023-10-30
+  - Bitwise Continued
 
 # Week-9
 [Top](#TOP)
