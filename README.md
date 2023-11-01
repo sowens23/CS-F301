@@ -37,22 +37,75 @@
 # Class Notes and Assignments
   | Weekly Notes | Assignments | Other Notes |
   | --- | --- | --- |
-  | [Week-1](#Week-1) | [HW00](https://github.com/sowens23/CS-F301/tree/main/homework/hw00) | |
-  | [Week-2](#Week-2) | [HW01](https://github.com/sowens23/CS-F301/tree/main/homework/hw01) | |
-  | [Week-3](#Week-3) | [HW02](https://github.com/sowens23/CS-F301/tree/main/homework/hw02) | |
-  | [Week-4](#Week-4) | [HW03](https://github.com/sowens23/CS-F301/tree/main/homework/hw03) | |
-  | [Week-5](#Week-5) | [HW04](https://github.com/sowens23/CS-F301/tree/main/homework/hw04) | |
-  | [Week-6](#Week-6) | [HW05](https://github.com/sowens23/CS-F301/tree/main/homework/hw05) | |
-  | [Week-7](#Week-7) | | |
-  | [Week-8](#Week-7) | | |
+  | [Week-1](#Week-1) | [HW00](https://github.com/sowens23/CS-F301/tree/main/homework) | |
+  | [Week-2](#Week-2) | [HW01](https://github.com/sowens23/CS-F301/tree/main/homework) | |
+  | [Week-3](#Week-3) | [HW02](https://github.com/sowens23/CS-F301/tree/main/homework) | |
+  | [Week-4](#Week-4) | [HW03](https://github.com/sowens23/CS-F301/tree/main/homework) | |
+  | [Week-5](#Week-5) | [HW04](https://github.com/sowens23/CS-F301/tree/main/homework) | |
+  | [Week-6](#Week-6) | [HW05](https://github.com/sowens23/CS-F301/tree/main/homework) | |
+  | [Week-7](#Week-7) | [HW06](https://github.com/sowens23/CS-F301/tree/main/homework) | |
+  | [Week-8](#Week-8) | | |
+  | [Week-8](#Week-9) | | |
 
+# Week-9
+[Top](#TOP)
+## 2023-10-27
+  - Let's scale an array?
+    ```c++
+    const int N=8192; // length of data
+    float in_data[8192]={100.0,200.0,300.0,400.0};
+    float out_data[8192];
+
+    // out_data[i] = in_data[i] * scale for i in 0...N-1
+    extern "C"
+    void scale_array(const float *in_data, float *out_data, 
+      long N, float scale);
+
+    float foo() {
+      scale_array(in_data, out_data, N, (float)(1.0 / sqrt(N)));
+      /*
+      for (int i=0;i<N;i++)
+        out_data[i] = in_data[i] * (float)(1.0 / sqrt(N));
+      */
+      return out_data[0];
+    }
+    ```
+  - Assmebly linked file to run program. This is used to increase speed/efficiency of program
+    ```assembly
+    ; // out_data[i] = in_data[i] * scale for i in 0...N-1
+    ; extern "C"
+    ; void scale_array(const float *in_data = *rdi, float *out_data in *rsi, 
+    ;  long N in rdx, float scale in xmm0);
+    .text
+    global scale_array
+    scale_array:
+      mov rcx, 0 ; i=0
+      start:
+        mov rcx, 0 ; i=0
+        start:
+          vmovss xm22, [rdi + 4*rcx] ; load src[i]
+          vmulss xmm2, xmm2, xmm0 ; scale
+          vmovss [rsi + 4*rcx], xmm2 ; store dest[i]
+
+        add rcx, 1 ; i++
+        cmp rcx, rdx; i<N
+        jl start
+    ```
+## 2023-10-25
+  - Flipping some bits using a bitwise operator and a mask!
+  ```c++
+  long base = 0x32100123333333;
+  long flip = 0x0x000111001100;
+  return base ^ flips;
+  ```
+## 2023-10-23
 
 # Week-8
 [Top](#TOP)
-## 2023-10-30
+## 2023-10-20
   - Talked about ARM, x86, and ??? float types, and type conversion!
   
-## 2023-10-28
+## 2023-10-18
   - We talked about threading. How CPU's will look into future code in search of dependencies, this will help the CPU know which calculations can be done simultaniously. 
   - 
     ```
@@ -81,7 +134,7 @@
       .8byte 0xdeadbeefcaffeef0 // 0x
     ```
 
-## 2023-10-26
+## 2023-10-16
   - Differences between x86 and Arm64! Arm64 is way more energy efficient, keeps all registers to 32/16 its, so there is a lot of energy saved by not needing to run strange protocols to make sure everything is aligned correctly.
     ```
     ; Add is a 3 parameter operation
@@ -121,7 +174,9 @@
 
 # Week-7
 [Top](#TOP)
-## 2023-10-06
+## 2023-10-13
+## 2023-10-11
+## 2023-10-09
   - Spent time reviewing stuff that will be on the Midterm
   - Final project dates
     - Discover project topic by 2023-10-13
