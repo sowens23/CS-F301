@@ -1,4 +1,0 @@
-oslawlor 3
-cheese 42
-covid 19
-UAF 42
