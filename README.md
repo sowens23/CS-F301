@@ -47,6 +47,40 @@
   | [Week-8](#Week-8) | | |
   | [Week-9](#Week-9) | | |
   | [Week-10](#Week-10) | | Project Proposal Presentation |
+  | [Week-11](#Week-11) | | |
+
+# Week-11
+[Top](#TOP)
+## 2023-11-06
+  - Timing operations
+    ```
+    #include <chrono>
+
+    ```
+  - Overhead of omp parallel is about 36,000 nanoseconds. So its definitely not better to use multithreading if your for loop or total operation is running faster than that.
+  - When threads are handling a variable that is not thread independent. You can add a mutex lock.
+    - OMP actually has a built in solution. You can add 
+    - This excludes all other threads from accessing this. Means you can reduce the time processed significantly.
+      ```c++
+      #pragma omp critical // lock a mutex
+        high_value_pixel += 1;
+      ```
+  - The solution really to handle critical variables that need to be handled by every thread, is to reduce the overhead to make it run.
+  - Atomic variables are a good way to handle this. It allows threads to use an 'atomic' version of a critical variable. ```std::atomic (long) high_value_pixel=0```
+
+  - In assembly we can provide locks
+    ```assembly
+    retry:
+      mov rcx, 1 ; I want to lock
+      lock xchg [mymutex], rdx ; swap it in (atomic even without lock prefix)
+      cmp rcx, 0
+      jne rety ; There was a zero in the lock, we just wrote a 1 so it's outs!
+    ret
+
+    section .data 
+    mymutex:
+      dq 0 ; 0 == unlocked; 1 == locked
+    ```
 
 # Week-10
 [Top](#TOP)
@@ -74,43 +108,64 @@
   - Map of squares in a complex planes
   - [Mandelbrot Set](https://en.wikipedia.org/wiki/Mandelbrot_set)
     ```c++
-    #include <omp.h>
-    
-    typedef unsigned char color;
+    /* 
+    Grayscale Mandelbrot set renderer
+
+    Dr. Orion Lawlor, lawlor@alaska.edu, 2023-11-03 (Public Domain)
+    */
+
+    // This is the size of the image we're drawing:
     int wid=1024, ht=1024;
 
-    color compute_color(int x, int y)
+    // This is the datatype for our grayscale image
+    typedef unsigned char color;
+
+    // Compute the color of the pixel at coordinates (x,y)
+    color compute_color(int x,int y)
     {
       int iterations = 0;
+      
+      // The complex constant determines what part of the Mandelbrot set we're rendering
       float cr = 0.0 + (x-wid/2)*(4.0)/wid;
-      float ci = 0.0 + (x-ht/2)*(4.0)/ht;
-
+      float ci = 0.0 + (y-ht /2)*(4.0)/ht;
+      
+      // z is the complex number we're squaring
       float zr = cr, zi = ci;
-
-      // z=z^2 + c
-      // (zr + i*zi) = (zr + i*zi)*(zr + i*zi)
-      float nr = zr*zr - zi*zi + cr 
-      float ni = 2.0*zr*zi + ci;
-      zr=nr; zi=ni;
-
-      float radius = sqrt(zr*zr+zi*zi);
-      if (radius<2.0) return 255;
-      return 128;
+      
+      // Repeated squaring
+      for (int i=0;i<100;i++)
+      {
+        // z = z^2 + c
+        // (zr + i*zi) = (zr + i*zi)*(zr + i*zi)
+        float nr = zr*zr - zi*zi + cr;
+        float ni = 2.0*zr*zi + ci;
+        zr=nr; zi=ni; 
+        
+        float radius = sqrt(zr*zr+zi*zi);
+        if (radius>2.0) return 20*iterations;
+        iterations++;
+      }
+      return 255;
     }
 
-    long foo()
-    {
 
+    long foo() 
+    {
+      // Make an image
       color img[wid*ht];
+      
+      // Render the pixels
       for (int y=0;y<ht;y++)
       for (int x=0;x<wid;x++)
       {
         img[y*wid + x] = compute_color(x,y);
       }
-
+      
+      // Write it as a PPM image (a simple uncompressed format supported by NetRun)
       std::ofstream imgfile("out.ppm");
-      imgfile <<"P5\n"<<wid<<" "<<ht<<" 255\n";
-      imgfile.write((char *)img, sizeof(img[0])*wid*ht);
+      imgfile<<"P5\n"<<wid<<" "<<ht<<" 255\n";
+      imgfile.write((char *)img,sizeof(img[0])*wid*ht);
+      return 0;
     }
     ```
 
