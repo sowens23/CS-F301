@@ -50,6 +50,70 @@
 
 # Week-10
 [Top](#TOP)
+## 2023-11-03
+  - We talked about how to use omp parallel threading.
+  - When threads stop doing things simultaneously (serialization) you are defeating the purpose
+    - Make sure your threads are running parallel
+    ```c++
+    #include <omp.h>
+
+    long foo ()
+    {
+      std::string total="0.0";
+      
+    #pragma omp parallel for
+      for (int i=0;i<1000;i++) {
+
+        #pragma omp critical
+          total += 3;
+      }
+      return total.size();
+    }
+    ```
+  - Writing some graphics apps using threading and recursion
+  - Map of squares in a complex planes
+  - [Mandelbrot Set](https://en.wikipedia.org/wiki/Mandelbrot_set)
+    ```c++
+    #include <omp.h>
+    
+    typedef unsigned char color;
+    int wid=1024, ht=1024;
+
+    color compute_color(int x, int y)
+    {
+      int iterations = 0;
+      float cr = 0.0 + (x-wid/2)*(4.0)/wid;
+      float ci = 0.0 + (x-ht/2)*(4.0)/ht;
+
+      float zr = cr, zi = ci;
+
+      // z=z^2 + c
+      // (zr + i*zi) = (zr + i*zi)*(zr + i*zi)
+      float nr = zr*zr - zi*zi + cr 
+      float ni = 2.0*zr*zi + ci;
+      zr=nr; zi=ni;
+
+      float radius = sqrt(zr*zr+zi*zi);
+      if (radius<2.0) return 255;
+      return 128;
+    }
+
+    long foo()
+    {
+
+      color img[wid*ht];
+      for (int y=0;y<ht;y++)
+      for (int x=0;x<wid;x++)
+      {
+        img[y*wid + x] = compute_color(x,y);
+      }
+
+      std::ofstream imgfile("out.ppm");
+      imgfile <<"P5\n"<<wid<<" "<<ht<<" 255\n";
+      imgfile.write((char *)img, sizeof(img[0])*wid*ht);
+    }
+    ```
+
 ## 2023-11-01
   - Understanding how to utilize threads. There is a 'thread' header. But some functions can not be shared very well.
     - Like std::cout in the code below, it will print something different everytime, because the thread, and main are fighting for cout.
@@ -58,33 +122,33 @@
     - It's totally okay to read global values from multiple threads,
       - but there is an issue when a thread is changing the variable in which other threads are dependent on.
     - Generally, never use global variables 
-    ```c++
-    #include <thread>
+      ```c++
+      #include <thread>
 
-    std::vector<int> g;
-    std::mutex lock_g;
+      std::vector<int> g;
+      std::mutex lock_g;
 
-    void otherFunction(void) {
-      for (int i=0;i<10000;i++) {
-        // RAII
-        std::lock_guard<std::mutex> guard(lock_g);
-        //lock_g.lock();
-        g.push_back(i);
-        lock_g.unlock();
+      void otherFunction(void) {
+        for (int i=0;i<10000;i++) {
+          // RAII
+          std::lock_guard<std::mutex> guard(lock_g);
+          //lock_g.lock();
+          g.push_back(i);
+          lock_g.unlock();
+        }
       }
-    }
 
-    long foo (void) {
-      std::thread myThread(otherFunction);
-      for (int i=0;i<10000;i++) {
-        lock_g.lock();
-        g.push_back(i);
-        lock_g.unlock();
+      long foo (void) {
+        std::thread myThread(otherFunction);
+        for (int i=0;i<10000;i++) {
+          lock_g.lock();
+          g.push_back(i);
+          lock_g.unlock();
+        }
+        myThread.join(); // Finish running thread before exit
+        return 0;
       }
-      myThread.join(); // Finish running thread before exit
-      return 0;
-    }
-    ```
+      ```
   - Threads are tricky to get to use together.
 ## 2023-10-30
   - Bitwise Continued
