@@ -51,6 +51,15 @@
 
 # Week-11
 [Top](#TOP)
+## 2023-11-08
+  ### Multicore Cache Coherence and False Sharing
+  - Hardware level of caches of increasing size
+    - Registers -> L1 -> L2 -> L3 -> L4 -> Main Memory -> Solid State -> Disk Drive
+  - Managing cache coherence is hard to handle, because a read-only copy of something in L3 memory, can be stored in a core's L1, so what happens if L1 has a read-only copy of something in L3, and another core changes it in L3?
+    - The general process is that writes go all the way out to RAM and caches are sensitive to writes.
+    - Atmoic safeguarding actually prevents data from being written and read simultaneously but comes at a cost. When two threads are accessing data from the same 64 byte cache line of memory, they have to wait for eachother.
+  - False sharing penalty is a side effect of Cache Coherence: write conflicts result in the cores stopping to figure out who has the most up-to-date data.
+  - If we have 4 cores, and use 1 core to process 4mb of data, the 4mb can't fit on a local cache for that core, but if you use 4 cores, with 1mb of data each, now this data can fit in the core's respective cache, so that you can actually get better than 4x efficiency speed up, because the data is split and saved in a closer cache/
 ## 2023-11-06
   - Timing operations
     ```
