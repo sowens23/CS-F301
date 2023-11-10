@@ -51,15 +51,36 @@
 
 # Week-11
 [Top](#TOP)
+## 2023-11-10
+  ### Multicore Memory Consistency
+  - There is a guarentees *sequential consistency* when using one thread. You write to a register.
+  - We can dictate that multi threads run in sequential order, which comes at a very high cost. But we can use other locks to make sure that registers use new data, even if that core has an outdated version of a value in it's cache.
+  - Basically mutex takes care of this. It's default security measure is sequential consistency
+    ```c++
+    #include <atomic>
+
+    std::atomic<int> doneFlag {0};
+
+    long foo() {
+      doneFlag.store(1, std::memory_order_release);
+      //int x = doneFlag.load();
+      return 0;
+    }
+    ```
+  - mfence is required in assembly for sequential consistency. So if you use the default mutex, it will call mfence and it will run quite a bit slower 
+  - [ARM LDR and STXR instructions](https://cirosantilli.com/linux-kernel-module-cheat/arm-ldxr-and-stxr-instructions.html) and [std::atomic cpp reference](https://en.cppreference.com/w/cpp/atomic/atomic_ref#:~:text=The%20std%3A%3Aatomic_ref%20class%20template%20applies%20atomic%20operations%20to,object%20it%20references%20is%20considered%20an%20atomic%20object.)
+  - 
+
 ## 2023-11-08
   ### Multicore Cache Coherence and False Sharing
   - Hardware level of caches of increasing size
-    - Registers -> L1 -> L2 -> L3 -> L4 -> Main Memory -> Solid State -> Disk Drive
+    - Registers -> L1 -> L2 -> L3 -> L4 -> Main Memory: Solid State, Disk Drive
   - Managing cache coherence is hard to handle, because a read-only copy of something in L3 memory, can be stored in a core's L1, so what happens if L1 has a read-only copy of something in L3, and another core changes it in L3?
     - The general process is that writes go all the way out to RAM and caches are sensitive to writes.
     - Atmoic safeguarding actually prevents data from being written and read simultaneously but comes at a cost. When two threads are accessing data from the same 64 byte cache line of memory, they have to wait for eachother.
   - False sharing penalty is a side effect of Cache Coherence: write conflicts result in the cores stopping to figure out who has the most up-to-date data.
-  - If we have 4 cores, and use 1 core to process 4mb of data, the 4mb can't fit on a local cache for that core, but if you use 4 cores, with 1mb of data each, now this data can fit in the core's respective cache, so that you can actually get better than 4x efficiency speed up, because the data is split and saved in a closer cache/
+  - If we have 4 cores, and use 1 core to process 4mb of data, the 4mb can't fit on a local cache for that core, but if you use 4 cores, with 1mb of data each, now this data can fit in the core's respective cache, so that you can actually get better than 4x efficiency speed up, because the data is split and saved in a closer cache.
+
 ## 2023-11-06
   - Timing operations
     ```
