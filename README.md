@@ -48,11 +48,76 @@
   | [Week-9](#Week-9) | | |
   | [Week-10](#Week-10) | | Project Proposal Presentation |
   | [Week-11](#Week-11) | | |
+  | [Week-12](#Week-12) | Final Project POC Due | |
+
+# Week-12
+[Top](#TOP)
+## 2023-11-15
+  ### [Optimizing CUDA programs via __shared__](https://www.google.com/url?q=https://docs.google.com/document/d/1NdkzIYb77hdvfyOxivZZzjpN0VIR9GeerVGk2icUoks/edit%23heading%3Dh.m9svmspgeaiz&sa=D&source=editors&ust=1700077438405395&usg=AOvVaw0iB3O875uPJi__q1lyUiac)
+  - Most of CUDA has 1:1 GPU to CPU architecture.
+  - CUDA spawns threads in hardware at a very high rate, so it's affordable to make millions of threads.
+  - CUDA or multicore CPU have multiple threads write to the same value in memory is a race condition with unpredictable results.
+  - CUDA thread "warps" are very similar to SIMD lanes on a CPU.
+  - There is no direct multicore analag to __shared __ memory, which is shared between all CUDA thread blocks
+  - [NVIDIA: Using Shared Memory in CUDA C/C++](https://developer.nvidia.com/blog/using-shared-memory-cuda-cc/) and [NVIDIA: Deep tuning and loop unrolling for CUDA parallel reduction](http://developer.download.nvidia.com/compute/cuda/1.1-Beta/x86_website/projects/reduction/doc/reduction.pdf)
+  - Everything you do in CUDA, needs to be on the GPU.
+    - Global Variables are stored in the CPU
+    - Global Variables are potentially access by ALL threads *BAD*
+    - "__device__ char buff[1024];"  
+  - CUDA has atomic arithmetic
+    ```c
+    #include <chrono>
+
+    const int buff_len = 1024;
+    __device_ char buff[buff_len];
+    //__device__ char buff[1024]; // THIS LINE IS SUSCEPTIBLE TO BUFFER OVERFLOW
+    __device__ int buff_idx=0;
+
+    __device__ void gpu_putchar(char c);
+    {
+      unsigned int my_idx - atomicAdd(&buff_idx,1); // Returns my index
+      // Line below has an issue with not being unsigned?
+      //int my_idx - atomicAdd(&buff_idx,1); // Returns my index
+      buff[my_idx] = c;
+    }
+
+    __global__ void runKernel(void)
+    {
+      // int y=threadIdx.x;
+      gpu_putchar('!');
+      // printf(" I am thread %d\n", y);
+    }
+
+    {
+      int blocks-1, threadsPer=2;
+    }
+    printf("CPU Started!\n")
+    {
+      auto start = std::chrono::system_clock::now();
+      runKernel<<<blocks,threadsPer>>>();
+      cudaDevicesSynchronize(); // join CPU threads
+
+      auto end = std::chrono::system_clock::now();
+
+      auto time_ns = std::chrono::duration_cast<std::chrono::nanoseconds>(end)
+      float ns_per_thread = time_ns/ float(blocks*threadsPer);
+      std::cout<<"total "<<time_ns<<" and ns_per_thread " <<std...
+    }
+
+    //std::cout <<>>
+    ```
+  - 
+
+## 2023-11-13
+  ### [CUDA: Million-thread parallel programming](https://www.google.com/url?q=https://www.cs.uaf.edu/2017/fall/cs301/lecture/11_08_CUDA.html&sa=D&source=editors&ust=1700077438405597&usg=AOvVaw1_HNNllfeOMLsAg0K6JXW7) and [GPU](https://www.google.com/url?q=https://www.tomshardware.com/features/nvidia-ampere-architecture-deep-dive&sa=D&source=editors&ust=1700077438405735&usg=AOvVaw3v0GC8YEGABXQg6Jw0Yx7J) vs [CPU](https://www.google.com/url?q=https://www.anandtech.com/show/16214/amd-zen-3-ryzen-deep-dive-review-5950x-5900x-5800x-and-5700x-tested/2&sa=D&source=editors&ust=1700077438405882&usg=AOvVaw23DOszpcvBQvOnWBv9zj4D)
+  - At the dentist, listened to lecture during a cleaning.
+  - GPUs are arithmetics goliaths.
+
 
 # Week-11
 [Top](#TOP)
 ## 2023-11-10
-  ### Multicore Memory Consistency
+  ### [Multicore Memory Consistency](https://www.google.com/url?q=https://docs.google.com/document/d/1x_H0UUHu3thPpoPhF2Wwi20Hmu7WYkY4kaJUlowc-dU/edit%23heading%3Dh.bdiu1o132j24&sa=D&source=editors&ust=1700077438406137&usg=AOvVaw2x-KxOEn6KMucy7jC_X33A)
   - There is a guarentees *sequential consistency* when using one thread. You write to a register.
   - We can dictate that multi threads run in sequential order, which comes at a very high cost. But we can use other locks to make sure that registers use new data, even if that core has an outdated version of a value in it's cache.
   - Basically mutex takes care of this. It's default security measure is sequential consistency
@@ -72,7 +137,7 @@
   - 
 
 ## 2023-11-08
-  ### Multicore Cache Coherence and False Sharing
+  ### [Multicore Cache Coherence and False Sharing](https://www.google.com/url?q=https://docs.google.com/document/d/e/2PACX-1vS6K2a-6GVXzd4ChnAn1t47kPParAgaVVMoc3MicIrcxRWM4-PrwqiJurgpVLigfFq3xlygu_iTNdgb/pub&sa=D&source=editors&ust=1700077438406361&usg=AOvVaw1xLXLU15SP5H8AB_TmK5bK)
   - Hardware level of caches of increasing size
     - Registers -> L1 -> L2 -> L3 -> L4 -> Main Memory: Solid State, Disk Drive
   - Managing cache coherence is hard to handle, because a read-only copy of something in L3 memory, can be stored in a core's L1, so what happens if L1 has a read-only copy of something in L3, and another core changes it in L3?
@@ -82,6 +147,7 @@
   - If we have 4 cores, and use 1 core to process 4mb of data, the 4mb can't fit on a local cache for that core, but if you use 4 cores, with 1mb of data each, now this data can fit in the core's respective cache, so that you can actually get better than 4x efficiency speed up, because the data is split and saved in a closer cache.
 
 ## 2023-11-06
+  ### [Multicore atomics and lock internals](https://www.google.com/url?q=https://www.cs.uaf.edu/courses/cs441/notes/locks/&sa=D&source=editors&ust=1700077438406527&usg=AOvVaw2NDZ0KzZncRKOFLKmpmgct)
   - Timing operations
     ```
     #include <chrono>
@@ -115,6 +181,7 @@
 # Week-10
 [Top](#TOP)
 ## 2023-11-03
+  ### [Multicore via OpenMP](https://www.google.com/url?q=https://www.cs.uaf.edu/courses/cs301/2014-fall/notes/threads/&sa=D&source=editors&ust=1700077438406820&usg=AOvVaw2VtxiuCzi4Aklv2ZOUQEj-)
   - We talked about how to use omp parallel threading.
   - When threads stop doing things simultaneously (serialization) you are defeating the purpose
     - Make sure your threads are running parallel
@@ -200,6 +267,7 @@
     ```
 
 ## 2023-11-01
+  ### Begin [Multicore via threads](https://www.google.com/url?q=https://www.cs.uaf.edu/courses/cs301/2014-fall/notes/threads/&sa=D&source=editors&ust=1700077438406999&usg=AOvVaw04CfnGFY287DaAPHOtsBMt), SIMD reference: [Depth Camera Example](https://www.google.com/url?q=https://www.cs.uaf.edu/courses/cs301/2014-fall/notes/threads/&sa=D&source=editors&ust=1700077438406999&usg=AOvVaw04CfnGFY287DaAPHOtsBMt), [Bitwise if-then-else multiplexer trick](https://www.google.com/url?q=https://www.cs.uaf.edu/2020/fall/cs301/lecture/10_19_mux.html&sa=D&source=editors&ust=1700077438407324&usg=AOvVaw0JDxblweYlUna-1MbpJwR4)
   - Understanding how to utilize threads. There is a 'thread' header. But some functions can not be shared very well.
     - Like std::cout in the code below, it will print something different everytime, because the thread, and main are fighting for cout.
     - A thread's stack will be pretty far away from the main stack.
@@ -236,11 +304,14 @@
       ```
   - Threads are tricky to get to use together.
 ## 2023-10-30
+  ### Final Project background presentations
+  ### Stare in horror at bitwise manipulation code in STL [pow code](https://www.google.com/url?q=https://github.com/bminor/glibc/blob/master/sysdeps/ieee754/flt-32/e_powf.c&sa=D&source=editors&ust=1700077438407501&usg=AOvVaw2vz5SRrmQwF8mInzRHoXoO)
   - Bitwise Continued
 
 # Week-9
 [Top](#TOP)
 ## 2023-10-27
+  ### Using [bitwise operators](https://www.google.com/url?q=https://www.cs.uaf.edu/2017/fall/cs301/lecture/09_27_bitwise.html&sa=D&source=editors&ust=1700077438407699&usg=AOvVaw1nF651s_DBr9wqTn2ClOtg) and SIMD
   - Let's scale an array?
     ```c++
     const int N=8192; // length of data
@@ -283,6 +354,7 @@
         jl start
     ```
 ## 2023-10-25
+  ### [Parallel Floats via SSE](https://www.google.com/url?q=https://www.cs.uaf.edu/2017/fall/cs301/lecture/11_03_sse.html&sa=D&source=editors&ust=1700077438407932&usg=AOvVaw3C5kXASskqkbC9DzFa7SjR)
   - Flipping some bits using a bitwise operator and a mask!
   ```c++
   long base = 0x32100123333333;
@@ -290,13 +362,15 @@
   return base ^ flips;
   ```
 ## 2023-10-23
+  ### [Bits inside a float](https://www.google.com/url?q=https://www.cs.uaf.edu/2020/fall/cs301/lecture/10_07_floatbits.html&sa=D&source=editors&ust=1700077438408115&usg=AOvVaw3AaY5PN0QUS0J_ooPLyV1c) and [Special Float Values](https://www.google.com/url?q=https://www.cs.uaf.edu/2011/fall/cs301/lecture/11_09_weird_floats.html&sa=D&source=editors&ust=1700077438408239&usg=AOvVaw08blGhhlS2A-5GdBcVFgrM)
 
 # Week-8
 [Top](#TOP)
 ## 2023-10-20
+  ### [Floats in x86 and arm64 assembly](https://www.google.com/url?q=https://www.cs.uaf.edu/2017/fall/cs301/lecture/10_02_float_asm.html&sa=D&source=editors&ust=1700077438408433&usg=AOvVaw2bfBJS6KcBAOin4xj2bdyj)
   - Talked about ARM, x86, and ??? float types, and type conversion!
-  
 ## 2023-10-18
+  ### Arm64 machine performance: branching
   - We talked about threading. How CPU's will look into future code in search of dependencies, this will help the CPU know which calculations can be done simultaniously. 
   - 
     ```
@@ -326,6 +400,7 @@
     ```
 
 ## 2023-10-16
+  ### [Beyond x86: Aarch64 64-bit ARM](https://www.google.com/url?q=https://docs.google.com/document/d/1ozon1FnGTX7LZFA1JKBaXTrAZxlJNj0jMzrKgaUd_zA/edit&sa=D&source=editors&ust=1700077438408646&usg=AOvVaw0jdRaLYvMELfowqD3Z05Kh)
   - Differences between x86 and Arm64! Arm64 is way more energy efficient, keeps all registers to 32/16 its, so there is a lot of energy saved by not needing to run strange protocols to make sure everything is aligned correctly.
     ```
     ; Add is a 3 parameter operation
@@ -366,6 +441,7 @@
 # Week-7
 [Top](#TOP)
 ## 2023-10-13
+  ### [Performance Introduction](https://www.google.com/url?q=https://docs.google.com/document/d/e/2PACX-1vTVh6MhZx4oW05FEVa16zMlRDufliOleTiv7q_9m48H52X8sLtGWomrblzr_KZXUTwzva2_KYu6HIIk/pub&sa=D&source=editors&ust=1700077438408881&usg=AOvVaw3_D0qHvfLwvLvZCOuUOMn-)
 ## 2023-10-11
 ## 2023-10-09
   - Spent time reviewing stuff that will be on the Midterm
@@ -379,6 +455,7 @@
 # Week-6
 [Top](#TOP)
 ## 2023-10-06
+  ### [Machine Code](https://www.google.com/url?q=https://docs.google.com/document/d/1ueOGpRE06QL0FIjNHcFAdpsuWogR4hffwIxVNCm1dj8/edit&sa=D&source=editors&ust=1700077438409360&usg=AOvVaw1v4k7LgzjQYmUpFug1lZus)
   - x86 Op Codes can be used to simplify a chain of commands using machine code!
     ```
     db 0x57 ; push rdi
@@ -437,6 +514,7 @@
     ```
 
 ## 2023-10-04
+  ### [Malloc from scratch](https://www.google.com/url?q=https://docs.google.com/document/d/1rDj5ifRoU5viSHry5wRmSqId3FtWydMpxTh9lpl99vo/edit&sa=D&source=editors&ust=1700077438409546&usg=AOvVaw1CyYChVCbo_WElSYp4y3lk)
   - In C family languages, including C++, you can intercept memory allocation calls by overriding your own "malloc" and "free".  There are many ways to write this, such as this simple stack-inspired buffer, which is nice and simple, but only works for very short programs.
     - The basic idea is we'll preallocate a big memory buffer at startup with nothing in it.
     - This will be our stuff to do with as we please. 
@@ -479,7 +557,7 @@
     ```
 
 ## 2023-10-02
-  ### Making a stack from scratch
+  ### [Making a stack from scratch](https://www.google.com/url?q=https://docs.google.com/document/d/14v-YepwnukAxU-Vs751epuhxTgRI0OLWg1opc46q0To/edit&sa=D&source=editors&ust=1700077438409833&usg=AOvVaw0W5P2SSo4xipgx0CbBCaUY)
   - AAA.asm
     ```
     global doAsmStuff
@@ -563,7 +641,7 @@
 # Week-5
 [Top](#TOP)
 ## 2023-09-29
-  ### Linking C/C++ and Assembly together
+  ### [Linking C/C++ and Assembly together](https://www.google.com/url?q=https://www.cs.uaf.edu/2017/fall/cs301/lecture/09_22_linker.html&sa=D&source=editors&ust=1700077438410128&usg=AOvVaw0c3N47bxpB_KEmDQDcOW5q)
   - Before a function in a c++ program, you can mark it as "extern C" so that it's interface can be read in C
   ```
   extern "C"
@@ -620,7 +698,7 @@
 
 
 ## 2023-09-27
-  ### printf: output in C or Assembly
+  ### [printf: output in C or Assembly](https://www.google.com/url?q=https://www.cs.uaf.edu/2017/fall/cs301/lecture/09_25_printf.html&sa=D&source=editors&ust=1700077438410421&usg=AOvVaw3HjYcdFqW_Jr3umJcGsZ3j)
   - We can 
     - %0 = Leading zero
     - %d = print decimal
@@ -672,7 +750,7 @@
   
 
 ## 2023-09-25
-  ### Buffer overflow attack intro
+  ### [Buffer overflow attack intro](https://www.google.com/url?q=https://docs.google.com/document/d/e/2PACX-1vRoWBKDqPjHiNT7MQ_7ELIpAlpcaDiqQTd6x1XGOlkLoRKkSB3mNLih5mRgVm_O0Si-T0-qxk1AwbyG/pub&sa=D&source=editors&ust=1700077438410761&usg=AOvVaw2O-doxhTdOSw7CkFeYnuSV)
   - Buffer overflow error, what happens when the name is longer than 8 characters.
     - Here we will overwrite the next bites after name. Which are the permissions!!!
     - This is also a pretty common way to create strings in C
@@ -791,7 +869,7 @@
 # Week-4
 [Top](#TOP)
 ## 2023-09-22
-  ### Function Pointers
+  ### [Function Pointers](https://www.google.com/url?q=https://www.cs.uaf.edu/courses/cs301/2014-fall/notes/methods/&sa=D&source=editors&ust=1700077438411035&usg=AOvVaw04FGTO-G_kZzZ9_H51Ki7t)
   - Let's look at a linked list in C
     - * Dereferenced a pointer
     - -> Dereferences a pointer
@@ -866,7 +944,7 @@
 
 
 ## 2023-09-20
-  ### Class and Struct in Memory
+  ### [Class and Struct in Memory](https://www.google.com/url?q=https://www.cs.uaf.edu/2017/fall/cs301/lecture/09_20_structs.html&sa=D&source=editors&ust=1700077438411289&usg=AOvVaw3dCOxUx_wOiyyISw3lLXc7)
   - In C++ You can return the decimal value of a char `3` which would return 52
     ```
     char c = `c`;
@@ -957,7 +1035,7 @@
     ```
 
 ## 2023-09-18
-  ### Memory Allocation
+  ### [Memory Allocation](https://www.google.com/url?q=https://www.cs.uaf.edu/2017/fall/cs301/lecture/09_18_allocation.html&sa=D&source=editors&ust=1700077438411544&usg=AOvVaw3LF4Bpa1nMj4-V2M6457ix)
   - Hello World in Assembly
     ```
     push 3 ; Align stack
@@ -1040,7 +1118,7 @@
 # Week-3
 [Top](#TOP)
 ## 2023-09-15 
-  ### Pointer Arithmetic: Strings and Arrays
+  ### [Pointer arithmetic: strings and arrays](https://www.google.com/url?q=https://www.cs.uaf.edu/2017/fall/cs301/lecture/09_15_strings_arrays.html&sa=D&source=editors&ust=1700077438411869&usg=AOvVaw2cHQiKXs5p4cRDx19gInp5)
   - foo is the 
   - 'dq' is Define Quadword, this 
     - dq 10 - is new line
@@ -1107,7 +1185,7 @@
     ```
 
 ## 2023-09-13
-  ### Pointers
+  ### [Pointers and Addresses](https://www.google.com/url?q=https://www.cs.uaf.edu/2017/fall/cs301/lecture/09_13_memory.html&sa=D&source=editors&ust=1700077438412110&usg=AOvVaw1SzA88Yb7IRzw5CNUQYBMu)
   - rsp is the stack register, this aligns the push and pops
     - You can 'add rsp, 8' which will add 8 bytes which is a 64 bit reference
       - Essentially this is a pop, it 'removes' something off of the stack
@@ -1167,6 +1245,7 @@
     - This is a brittle fix, but it can get your code running this week.
 
 ## 2023-09-11
+  ### [Introduction to Pointers](https://www.google.com/url?q=https://docs.google.com/presentation/d/e/2PACX-1vTNsqdZg7doTgfZ9jYANuD8RAivl6lVAEZ3T5mjN5o54z-jq3AHrQBNIQ1SYJg-6qV1wmJGMdswTt3v/pub?start%3Dfalse%26loop%3Dfalse%26delayms%3D60000%26slide%3Did.p&sa=D&source=editors&ust=1700077438412459&usg=AOvVaw0OMXuCZQdCOp8kWtcez17l)
   ### Recap and Why 'Assmebly'. Intro to Pointers
   - 8 bit signed int can reach about  billion
     - We can caluclate factorials up to 12, in an int.
@@ -1217,6 +1296,7 @@
 # Week-2
 [Top](#TOP)
 ## 2023-09-08
+  ### [Bits in signed/unsigned](https://www.google.com/url?q=https://docs.google.com/presentation/d/1ZotiJZG89kmycSsxp2yKT5baOOgqJipwxJZYbMbn2I0/&sa=D&source=editors&ust=1700077438412691&usg=AOvVaw1At31Zh_G2TzA1QC9U4lMD), [Counting in Binary](https://www.google.com/url?q=https://www.cs.uaf.edu/2012/fall/cs301/lecture/08_31_bits.html&sa=D&source=editors&ust=1700077438412811&usg=AOvVaw3MkyFRPAl61spnAIcH2N-f), and [Assembly datatype and register sizes](https://www.google.com/url?q=https://www.cs.uaf.edu/2017/fall/cs301/lecture/09_06_functions.html&sa=D&source=editors&ust=1700077438413210&usg=AOvVaw2UUQrvMqGOOn_Tpr9R2MDq).
   - Running over Binary, and Hexidecimal 
     - b10 10 in b2 is 1010 in b16 is a
   - The last bit in binary (128 bit) equals an negative sign.
@@ -1257,6 +1337,7 @@
         ```
 
 ## 2023-09-06
+  ### [Push/Pop the stack](https://www.google.com/url?q=https://www.cs.uaf.edu/2017/fall/cs301/lecture/09_08_stack.html&sa=D&source=editors&ust=1700077438413085&usg=AOvVaw2ZNx7k5xUPjhEnBYF_TwrT) and [Assembly Functions](https://www.google.com/url?q=https://www.cs.uaf.edu/2017/fall/cs301/lecture/09_06_functions.html&sa=D&source=editors&ust=1700077438413210&usg=AOvVaw2UUQrvMqGOOn_Tpr9R2MDq)
   - A brittle fix is when you 'fix' a loop to catch conditions that you cannot calculate.
     - ie. On inputs [0,10], return +2 if integer is even.
     - It's only appropriate to check if values are even then add two and return
@@ -1324,7 +1405,7 @@
 # Week 1
 [Top](#TOP)
 ## 2023-08-30
-  ### NASM - Netwide assembler
+  ### [Assembly Language Basics: Registers/Instructions](https://www.google.com/url?q=https://www.cs.uaf.edu/2017/fall/cs301/lecture/08_30_assembly.html&sa=D&source=editors&ust=1700077438413621&usg=AOvVaw3gxycM55KzSuLbq_OmEpBm)
   ```
   ; Input: rdi is our first argument
   mov rcx, rdi    ; move arg to temp
@@ -1353,6 +1434,7 @@
   ```
 
 ## 2023-08-28
+  ### [The Language Hierarchy ("Why Assembly")](https://www.google.com/url?q=https://docs.google.com/document/d/e/2PACX-1vQ6_GDJ6uEDzm3NGAH9Dd41h7MAbwHc0FSIXdHZ5xCW7fbeThK58QzeuH8tpsJAzDCTMvL0s5Wje5gg/pub&sa=D&source=editors&ust=1700077438413879&usg=AOvVaw1oashJrXyxRVq2WH8itVQk)
   - Don't be an int x32 loser, use longs
   - couple checks and inputs in the same line IE
     - ret - Returns a value
