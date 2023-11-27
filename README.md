@@ -48,10 +48,28 @@
   | [Week-9](#Week-9) | | |
   | [Week-10](#Week-10) | | Project Proposal Presentation |
   | [Week-11](#Week-11) | | |
-  | [Week-12](#Week-12) | Final Project POC Due | |
+  | [Week-12](#Week-12) | Final Project Rough Draft Due | |
+  | [Week-13](#Week-13) | | Fall Break (1 class) |
+  | [Week-14](#Week-14) | | |
+
+# Week-14
+[Top](#TOP)
+## 2023-11-27
+  ### [Computer Architecture Past, Present, and Future](https://www.google.com/url?q=https://docs.google.com/presentation/d/1T5YwKc_xq59OqxuzWLeGymNi7RvFpGPNgmZGg3KWZuc/edit%23slide%3Did.p&sa=D&source=editors&ust=1701126196035833&usg=AOvVaw1wZFaUoVhttZE6IWqsqMpb)
+
+# Week-13
+[Top](#TOP)
+## 2023-11-24
+  - Holiday Break
+## 2023-11-22
+  - Holiday Break
+## 2023-11-20
+  ### [mmap The Framebuffer](https://www.google.com/url?q=https://docs.google.com/document/d/17w260GjDLj7wBEbz8MtdLF5Hjlp8xWTglBnuvs_0ScI/edit&sa=D&source=editors&ust=1701126196036272&usg=AOvVaw1Rkeak7xQHqPIqClg4RM33)
 
 # Week-12
 [Top](#TOP)
+## 2023-11-17
+  ### [Identifying CUDA-friendly problems and Amdahl's Law](https://www.google.com/url?q=https://docs.google.com/document/d/1qshJn72ptVW35vJBWXOIIlwwoPkodeD4iMipKVSrM-s/edit&sa=D&source=editors&ust=1701126196036600&usg=AOvVaw24m1cKRABiknsDSmT0ztVp)
 ## 2023-11-15
   ### [Optimizing CUDA programs via __shared__](https://www.google.com/url?q=https://docs.google.com/document/d/1NdkzIYb77hdvfyOxivZZzjpN0VIR9GeerVGk2icUoks/edit%23heading%3Dh.m9svmspgeaiz&sa=D&source=editors&ust=1700077438405395&usg=AOvVaw0iB3O875uPJi__q1lyUiac)
   - Most of CUDA has 1:1 GPU to CPU architecture.
