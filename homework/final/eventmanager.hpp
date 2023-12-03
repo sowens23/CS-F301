@@ -11,10 +11,11 @@ File Function:
 #ifndef FILE_EVENTMANAGER_HPP_INCLUDED
 #define FILE_EVENTMANAGER_HPP_INCLUDED
 
-#include <iostream>
-using std::cout; 
-using std::cin;
 #include "drawcalendar.hpp"
+
+#include <iostream>
+#include <vector>
+
 
 struct Event {
   std::string name;
@@ -25,58 +26,73 @@ struct Event {
     : name(n), time(t), location(l) {}
 };
 
-void event_Choice(int event_choice) {
-  // Clear screen 
-  cout << "\033[2J\033[1;1H";
+struct EventTracker {
+  // Initialize Event Tracker bucket
+  std::map<int, std::vector<Event>> eventMap;
 
-  // Displaying events of a given time fram
-  switch(event_choice) {
-    // Display today's event
-    case 1:
-      cout << "Display today's events\n";
-      break;
-    // Display this weeks events
-    case 2:
-      cout << "Display this week's events\n";
-      break;
-    // Display this months events
-    case 3:
-      cout << "Display this month's events\n";
-      break;
-    // Display specific date events
-    case 4:
-      cout << "Display this a day's events\n";
-      break;
-    // Display all events
-    case 5:
-      cout << "Display this all events\n";
-      break;
-    default:
-      break;
+  // Add Event
+  void addEvent(const int& date, const Event& event) {
+    eventMap[date].push_back(event);
   }
+
+  // Check for event
+  bool hasEvents(const int& date) {
+    return eventMap.find(date) != eventMap.end() && !eventMap[date].empty();
+  }
+
+};
+
+void event_Draw(int event_choice) {
+  // Clear screen 
+  std::cout << "\033[2J\033[1;1H";
+
+  // Display today's event
+  if (event_choice == 1) {
+    std::cout << "View events\n";
+  }
+  // Display this weeks events
+  if (event_choice == 2) {
+    std::cout << "Add events\n";
+  }
+  // Display this months events
+  if (event_choice == 3) {
+    std::cout << "Remove events\n";
+  }
+  // Display specific date events
+  if (event_choice == 4) {
+    std::cout << "Import events\n";
+  }
+  // Display all events
+  if (event_choice == 5) {
+    std::cout << "Export events\n";
+  }
+
+  // Pause before returning to menu
+  std::cout << "\n";
+  pauseConsole();
 }
 
 void event_Display() {
   // Clear the screen
-  cout << "\033[2J\033[1;1H";
+  std::cout << "\033[2J\033[1;1H";
 
   // Draw Event manager menu
-  cout << "Welcome to the Event manager!\n\n";
-  cout << "\033[35m1.\033[0m View events.\n";
-  cout << "\033[35m2.\033[0m Add events.\n";
-  cout << "\033[35m3.\033[0m Remove events.\n";
-  cout << "\033[35m4.\033[0m Import events.\n";
-  cout << "\033[35m5.\033[0m Export events.\n";
-  cout << "\033[35m5.\033[0m \033[36mExit\033[0m\n\n";
-  cout << "Please enter your choice: ";
+  std::cout << "Welcome to the Event manager!\n\n";
+  std::cout << "\033[35m1.\033[0m View events.\n";
+  std::cout << "\033[35m2.\033[0m Add events.\n";
+  std::cout << "\033[35m3.\033[0m Remove events.\n";
+  std::cout << "\033[35m4.\033[0m Import events.\n";
+  std::cout << "\033[35m5.\033[0m Export events.\n";
+  std::cout << "\033[35m6.\033[0m \033[36mExit\033[0m\n\n";
+  std::cout << "Please enter your choice: ";
 }
 
 void event_Main() {
-  int event_choice;
+  int event_choice=0;
   while(event_choice != 6) {
     event_Display();
-    cin >> event_choice;
-    event_Choice(event_choice);
+    std::cin >> event_choice;
+    if (event_choice != 6) event_Draw(event_choice);
   }
 }
 

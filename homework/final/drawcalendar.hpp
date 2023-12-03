@@ -15,13 +15,13 @@ File Function:
 #include "utility.hpp"
 
 #include <iostream>
-// For cout, cin, endl
+// For std::cout, std::cin, std::endl
 #include <chrono>
-// For time_t, local_time, chrono::system_clock, tm
+// For std::time_t, std::local_time, std::chrono::system_clock, std::tm
 #include <iomanip>
-// For setw, put_time
+// For std::setw, std::put_time
 #include <map>
-// For map
+// For std::map
 
 void calendar_Draw(int choice) {
   // Set todays date
@@ -107,7 +107,7 @@ void calendar_DisplayMenu() {
 
 void calendar_Main() {
   // Print calendar of choice
-  int calendar_choice;
+  int calendar_choice=0;
   while (calendar_choice != 5) {
     calendar_DisplayMenu();
     std::cin >> calendar_choice;
