@@ -10,11 +10,11 @@ File Function:
 
 #ifndef FILE_EVENTMANAGER_HPP_INCLUDED
 #define FILE_EVENTMANAGER_HPP_INCLUDED
-//#endif // #ifndef FILE_EVENTMANAGER_HPP_INCLUDED
 
 #include <iostream>
-// For std::cin, std::cout
-using std::cout; using std::cin;
+using std::cout; 
+using std::cin;
+#include "drawcalendar.hpp"
 
 struct Event {
   std::string name;
@@ -26,6 +26,9 @@ struct Event {
 };
 
 void event_Choice(int event_choice) {
+  // Clear screen 
+  cout << "\033[2J\033[1;1H";
+
   // Displaying events of a given time fram
   switch(event_choice) {
     // Display today's event
@@ -51,31 +54,26 @@ void event_Choice(int event_choice) {
     default:
       break;
   }
-
-  // Pause before returning to menu
-  cout << "\n";
-  pauseConsole();
 }
 
 void event_Display() {
-  // Clear the screen and move the cursor to the top-left corner
+  // Clear the screen
   cout << "\033[2J\033[1;1H";
 
-  // Enter event_manager
+  // Draw Event manager menu
   cout << "Welcome to the Event manager!\n\n";
-  cout << "\033[35m1.\033[0m View events of today.\n";
-  cout << "\033[35m2.\033[0m View events of this week.\n";
-  cout << "\033[35m3.\033[0m View events of this month.\n";
-  cout << "\033[35m4.\033[0m View events of specific date.\n";
-  cout << "\033[35m5.\033[0m View *all* events.\n";
-  cout << "\033[35m6.\033[0m \033[36mReturn\033[0m to main menu.\n";
-  cout << "\n";
+  cout << "\033[35m1.\033[0m View events.\n";
+  cout << "\033[35m2.\033[0m Add events.\n";
+  cout << "\033[35m3.\033[0m Remove events.\n";
+  cout << "\033[35m4.\033[0m Import events.\n";
+  cout << "\033[35m5.\033[0m Export events.\n";
+  cout << "\033[35m5.\033[0m \033[36mExit\033[0m\n\n";
   cout << "Please enter your choice: ";
 }
 
 void event_Main() {
   int event_choice;
-  while(true) {
+  while(event_choice != 6) {
     event_Display();
     cin >> event_choice;
     event_Choice(event_choice);
