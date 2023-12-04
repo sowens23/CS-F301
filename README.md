@@ -54,8 +54,10 @@
 
 # Week-14
 [Top](#TOP)
+## 2023-12-01
+ ### [Quantum Computing](https://www.google.com/url?q=https://docs.google.com/document/d/1Mdi6yc8eiW4gREd5BBsyRWoq3Nje92TH0yWEm1GrFgg/edit&sa=D&source=editors&ust=1701471895515732&usg=AOvVaw3FXPM3m83KF0xDNIIHoutM)
 ## 2023-11-29
- ### []()
+ ### [Future of computer architecture](https://www.google.com/url?q=https://docs.google.com/presentation/d/1T5YwKc_xq59OqxuzWLeGymNi7RvFpGPNgmZGg3KWZuc/edit%23slide%3Did.p&sa=D&source=editors&ust=1701471895516092&usg=AOvVaw2iFQnTNq0TCo652TjgKLTC)
 ## 2023-11-27
   ### [Computer Architecture Past, Present, and Future](https://www.google.com/url?q=https://docs.google.com/presentation/d/1T5YwKc_xq59OqxuzWLeGymNi7RvFpGPNgmZGg3KWZuc/edit%23slide%3Did.p&sa=D&source=editors&ust=1701126196035833&usg=AOvVaw1wZFaUoVhttZE6IWqsqMpb)
 
