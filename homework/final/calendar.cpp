@@ -9,83 +9,82 @@ File Function:
 
 #include "drawcalendar.hpp"
 #include "eventmanager.hpp"
+#include "utility.hpp"
 
 #include <iostream>
-// For std::cin, std::cout
-using std::cout; using std::cin;
-#include <chrono>
-// For std::time_t, std::tm, std::local_time, std::chrono
-#include <iomanip>
-#include <ctime>
-#include <map>
-// For std::map
-#include <string>
-// For std::string
+// For std::cin, std::cout, std::endl
 
-//void display_menu(); void select_Choice(int choice_t); void view_Monthcalendar(); void view_Weekcalendar(); void view_Daycalendar(); void event_Manager(); void drawCalendar(int calendar_type);
-
-void pauseConsole() {
-  cout << "Please press 'Enter' to continue...";
-  cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-  std::cin.get();
-}
-
-void menu_Display(){
+std::string menu_Display(){
+  std::string main_menu = "";
   // Clear the screen and move the cursor to the top-left corner
-  cout << "\033[2J\033[1;1H";
+  main_menu += "\033[2J\033[1;1H";
 
   // Display Welcome Screen with options
-  cout << "Welcome to the Calendar App!\n\n";
+  main_menu += "Welcome to the Calendar App!\n\n";
 
   // Using ANSI escape code for light red/magenta color
-  cout << "\033[35m1.\033[0m View this month's calendar\n";
-  cout << "\033[35m2.\033[0m View this week's events\n";
-  cout << "\033[35m3.\033[0m View specific events of a day\n";
-  cout << "\033[35m4.\033[0m View today's events\n";
-  cout << "\033[35m5.\033[0m Manage events\n";
-  cout << "\033[35m6.\033[0m \033[36mExit\033[0m\n\n";
-  cout << "\033[0mPlease enter your choice: ";
+  main_menu += "\033[35m1.\033[0m View calendar\n";
+  main_menu +="\033[35m2.\033[0m Manage events\n";
+  main_menu += "\033[35m3.\033[0m \033[36mExit\033[0m\n\n";
+  return main_menu;
 }
 
-void menu_Choice(int main_choice) {
-  switch (main_choice) {
-    case 1:
-      // View Month Calender
-      calendar_Draw(main_choice);
-      break;
-    case 2:
-      // View this weeks event
-      calendar_Draw(main_choice);
-      break;
-    case 3:
-      // View Specific Day Calender
-      calendar_Draw(main_choice);
-      break;
-    case 4:
-      // View today's day Calender
-      calendar_Draw(main_choice);
-      break;
-    case 5:
-      // Add Event
-      event_Main();
-      break;
-    case 6:
-      // Exit
-      std::cout << "Exiting application.\n";
-      exit(0);
-    default:
-      std::cout << "Invalid choice. Please try again.\n";
-  }
+EventTracker* assign_Tracker(EventTracker* calendar_t) {
+  std::string assign_TrackerDisplay = ""; 
+  int choice=0;
+  // Clear the screen and move the cursor to the top-left corner
+  assign_TrackerDisplay += "\033[2J\033[1;1H";
+
+  // Menu selection for loading event tracker
+  assign_TrackerDisplay += "\033[35mNo event tracker loaded.\033[0m\n\n";
+  assign_TrackerDisplay += "\033[35m1.\033[0m Create a new Event Tracker\n";
+  assign_TrackerDisplay += "\033[35m2.\033[0m Upload an existing Event Tracker\n\n";
+
+  // Handle menu choice
+  choice = getUserInput(assign_TrackerDisplay, 1, 3, "Enter tracker option: ");
+
+  // Initialize new EventTracker
+  if (choice == 1) calendar_t = new EventTracker();
+
+  // Select EventTracker file locally
+  if (choice == 2) {
+    // std::string filename;
+    // std::cout << "Enter filename to load: ";
+    // std::cin >> filename;
+    // calendar_t->loadEventTracker(calendar_t, filename);
+    calendar_t = new EventTracker();
+  } 
+  
+  return calendar_t;
 }
 
+// Main, this is for initially loading EventTracker, 
+// drawing calendars and managing events
 int main () {
-  // Display menu, to allow user to select menu options
-  int main_choice;
+  int main_choice=0;
+  int error=0;
+  EventTracker* calendar_1 = nullptr;
+
   while(true) {
-    menu_Display();
-    cin >> main_choice;
-    menu_Choice(main_choice);
+    // // If Event Tracker is null, set tracker
+    if (calendar_1 == nullptr) calendar_1 = assign_Tracker(calendar_1);
+
+    // Handle menu choice
+    main_choice = getUserInput(menu_Display(), 1, 3, "Choose menu option: ");
+    if (main_choice == 3) { 
+      // Exit application 
+      break;
+
+    } else {
+      // View Month Calender
+      if (main_choice == 1) calendar_1 = calendar_Main(calendar_1);
+
+      // View this weeks event
+      if (main_choice == 2) calendar_1 = event_Main(calendar_1);
+    }
   }
 
+  // Clean exit application 
+  std::cout << "Exiting application.\n\n";
   return 0;
 }
