@@ -14,49 +14,77 @@ File Function:
 #include <iostream>
 // For std::cin, std::cout, std::endl
 
-void menu_Display(){
+std::string menu_Display(){
+  std::string main_menu = "";
   // Clear the screen and move the cursor to the top-left corner
-  std::cout << "\033[2J\033[1;1H";
+  main_menu += "\033[2J\033[1;1H";
 
   // Display Welcome Screen with options
-  std::cout << "Welcome to the Calendar App!\n\n";
+  main_menu += "Welcome to the Calendar App!\n\n";
 
   // Using ANSI escape code for light red/magenta color
-  std::cout << "\033[35m1.\033[0m View calendar\n";
-  std::cout << "\033[35m2.\033[0m Manage events\n";
-  std::cout << "\033[35m3.\033[0m \033[36mExit\033[0m\n\n";
-  std::cout << "\033[0mPlease enter your choice: ";
+  main_menu += "\033[35m1.\033[0m View calendar\n";
+  main_menu +="\033[35m2.\033[0m Manage events\n";
+  main_menu += "\033[35m3.\033[0m \033[36mExit\033[0m\n\n";
+  return main_menu;
 }
 
-void menu_Choice(int main_choice) {
-  switch (main_choice) {
-    case 1:
-      // View Month Calender
-      calendar_Main();
-      break;
-    case 2:
-      // View this weeks event
-      event_Main();
-      break;
-    case 3:
-      // Exit
-      std::cout << "Exiting application.\n";
-      exit(0);
-    default:
-      std::cout << "Invalid choice. Please try again.\n";
-  }
+EventTracker* assign_Tracker(EventTracker* calendar_t) {
+  std::string assign_TrackerDisplay = ""; 
+  int choice=0;
+  // Clear the screen and move the cursor to the top-left corner
+  assign_TrackerDisplay += "\033[2J\033[1;1H";
+
+  // Menu selection for loading event tracker
+  assign_TrackerDisplay += "\033[35mNo event tracker loaded.\033[0m\n\n";
+  assign_TrackerDisplay += "\033[35m1.\033[0m Create a new Event Tracker\n";
+  assign_TrackerDisplay += "\033[35m2.\033[0m Upload an existing Event Tracker\n\n";
+
+  // Handle menu choice
+  choice = getUserInput(assign_TrackerDisplay, 1, 3, "Enter tracker option: ");
+
+  // Initialize new EventTracker
+  if (choice == 1) calendar_t = new EventTracker();
+
+  // Select EventTracker file locally
+  if (choice == 2) {
+    // std::string filename;
+    // std::cout << "Enter filename to load: ";
+    // std::cin >> filename;
+    // calendar_t->loadEventTracker(calendar_t, filename);
+    calendar_t = new EventTracker();
+  } 
+  
+  return calendar_t;
 }
 
+// Main, this is for initially loading EventTracker, 
+// drawing calendars and managing events
 int main () {
-  // Display menu, to allow user to select menu options
-  int main_choice;
-  EventTracker calendar_1;
-  std::cout << calendar_1.hasEvents(20230312) << std::endl;
+  int main_choice=0;
+  int error=0;
+  EventTracker* calendar_1 = nullptr;
+
   while(true) {
-    menu_Display();
-    std::cin >> main_choice;
-    menu_Choice(main_choice);
+    // // If Event Tracker is null, set tracker
+    if (calendar_1 == nullptr) calendar_1 = assign_Tracker(calendar_1);
+
+    // Handle menu choice
+    main_choice = getUserInput(menu_Display(), 1, 3, "Choose menu option: ");
+    if (main_choice == 3) { 
+      // Exit application 
+      break;
+
+    } else {
+      // View Month Calender
+      if (main_choice == 1) calendar_1 = calendar_Main(calendar_1);
+
+      // View this weeks event
+      if (main_choice == 2) calendar_1 = event_Main(calendar_1);
+    }
   }
 
+  // Clean exit application 
+  std::cout << "Exiting application.\n\n";
   return 0;
 }

@@ -13,6 +13,7 @@ File Function:
 //#endif // #ifndef FILE_DRAWCALENDAR_HPP_INCLUDED
 
 #include "utility.hpp"
+#include "eventmanager.hpp"
 
 #include <iostream>
 // For std::cout, std::cin, std::endl
@@ -23,7 +24,7 @@ File Function:
 #include <map>
 // For std::map
 
-void calendar_Draw(int choice) {
+EventTracker* calendar_Draw(int calendar_choice, EventTracker* calendar_t) {
   // Set todays date
     auto now = std::chrono::system_clock::now();
     time_t t_now = std::chrono::system_clock::to_time_t(now);
@@ -53,7 +54,7 @@ void calendar_Draw(int choice) {
   std::cout << "\033[2J\033[1;1H"; 
 
   // Print Monthly Calendar
-  if (choice == 1) {
+  if (calendar_choice == 1) {
     std::cout << "\033[36m" << std::setw(3)<< "  " << std::put_time(&tm_now, " %B %Y") << "\033[0m" << std::endl;
     std::cout << " Mo Tu We Th Fr Sa Su" << std::endl;
     for (int week = 0; week < 6; ++week) {
@@ -69,50 +70,66 @@ void calendar_Draw(int choice) {
       std::cout << "\n";
       if (day > days_in_month) break;
     }
+    std::cout << "\n"; pauseConsole();
   }
 
   // Draw the weeks calendar
-  if (choice == 2) {
+  if (calendar_choice == 2) {
     std::cout << "Drawing this week's calendar\n";
+    std::cout << "\n"; pauseConsole();
   }
 
 
   // Draw a day's calendar
-  if (choice == 3) {
+  if (calendar_choice == 3) {
     std::cout << "Drawing today's calendar\n";
+    std::cout << "\n"; pauseConsole();
   }
 
   // Draw today's calendar
-  if (choice == 4) {
+  if (calendar_choice == 4) {
     std::cout << "Drawing today's calendar\n";
+    std::cout << "\n"; pauseConsole();
   }
 
-  // Pause before returning to menu
-  std::cout << "\n";
-  pauseConsole();
+  // Return calendar
+  return calendar_t;
 }
 
-void calendar_DisplayMenu() {
+std::string calendar_DisplayMenu() {
+  std::string display_menu="";
   // Clear screen 
-  std::cout << "\033[2J\033[1;1H";
+  display_menu += "\033[2J\033[1;1H";
 
   // Draw calendar menu
-  std::cout << "\033[35m1.\033[0m View month calendar\n";
-  std::cout << "\033[35m2.\033[0m View week calendar\n";
-  std::cout << "\033[35m3.\033[0m View a specific day calendar\n";
-  std::cout << "\033[35m4.\033[0m View todays calendar\n";
-  std::cout << "\033[35m5.\033[0m \033[36mExit\033[0m\n\n";
-  std::cout << "\033[0mPlease enter your choice: ";
+  display_menu += "\033[35m1.\033[0m View month calendar\n";
+  display_menu += "\033[35m2.\033[0m View week calendar\n";
+  display_menu += "\033[35m3.\033[0m View a specific day calendar\n";
+  display_menu += "\033[35m4.\033[0m View todays calendar\n";
+  display_menu += "\033[35m5.\033[0m \033[36mExit\033[0m\n\n";
+  return display_menu;
 }
 
-void calendar_Main() {
-  // Print calendar of choice
+EventTracker* calendar_Main(EventTracker* calendar_t) {
   int calendar_choice=0;
-  while (calendar_choice != 5) {
-    calendar_DisplayMenu();
-    std::cin >> calendar_choice;
-    if (calendar_choice != 5) calendar_Draw(calendar_choice);
+  int error=0;
+
+  while(true) {
+    // Display menu, to allow user to select menu options, loop selection fail
+    calendar_choice = getUserInput(calendar_DisplayMenu(), 1, 5, "Enter menu option: ");
+
+    // Handle menu choice
+    if (calendar_choice == 5) { 
+      // Exit application 
+      return calendar_t;
+    } else {
+      // Enter menu selection
+      calendar_t = calendar_Draw(calendar_choice, calendar_t);
+    }
   }
+
+  // Return to main
+  return calendar_t;
 }
 
 #endif // #ifndef FILE_DRAWCALENDAR_HPP_INCLUDED
