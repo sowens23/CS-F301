@@ -18,8 +18,10 @@ File Function:
 #include <vector>
 #include <chrono>
 #include <map>
+#include <algorithm>
+#include <fstream>
 
-
+// Event struct for EventTracker map data member
 struct Event {
   std::string name;
   std::string time;
@@ -29,6 +31,7 @@ struct Event {
     : name(n), time(t), location(l) {}
 };
 
+// EventTracker class
 class EventTracker {
 // Big 5
 public:
@@ -57,6 +60,11 @@ public:
 
 // Class functions
 public:
+  // Check for event
+  bool hasEvent(const int& date) {
+    return eventMap.find(date) != eventMap.end() && !eventMap[date].empty();
+  }
+
   // View Event
   void viewEvent(const int& date) {
     if (hasEvent(date)) {
@@ -65,9 +73,11 @@ public:
             std::cout << "Name: " << event.name << ", "
                       << "Time: " << event.time << ", "
                       << "Location: " << event.location << "" << std::endl;
+
         }
+        std::cout << "\nEvent(s) viewed.";
     } else {
-        std::cout << "No events found for " << date << "." << std::endl;
+        std::cout << "No events found for " << date << ".";
     }
   }
 
@@ -89,26 +99,93 @@ public:
     // Create event
     Event event_t(name, time, location);
     eventMap[date].push_back(event_t);
+    std::cout << "\nEvent added.";
   }
 
-  // Check for event
-  bool hasEvent(const int& date) {
-    return eventMap.find(date) != eventMap.end() && !eventMap[date].empty();
+  // Remove Event
+  void removeEvent (const int& date) {
+    // Iterate through events of that date to find the specified event name
+    auto dateEntry = eventMap.find(date);
+
+    if (dateEntry != eventMap.end()) {
+      // Events for date found, print events
+      viewEvent(date);
+      std::string name_t="";
+
+      // Get event name
+      std::cout << "\nWhat is the event name: ";
+        // Clear any error flags in cin
+        std::cin.clear();
+        // Consume any remaining input, including the newline character
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::getline(std::cin, name_t);
+
+      // Look for event with specific name
+      auto& events = dateEntry->second;
+      auto eventToRemove = std::remove_if(events.begin(), events.end(),
+        [&name_t](const Event& event) {
+          return event.name == name_t;
+        });
+      
+      //
+      if (eventToRemove != events.end()) {
+        events.erase(eventToRemove, events.end());
+        std::cout << "Event found and removed.\n";
+      } else {
+        std::cout << "Event with name '" << name_t << "' not found.\n";
+      }
+    } else {
+      std::cout << "No events found for specified date.\n";
+    }
   }
 
-  // Load local event tracker
-  void loadEventTracker(EventTracker* calendar_t, std::string filename_t) {
-    // What to do
+  // Import Events
+  void importEvents() {
+    // Update me!
+  }
 
-      std::cout << "Failed to load Event Tracker." << std::endl;
-      delete calendar_t;
-      calendar_t = nullptr;
+  // Export Events
+  void exportEvents() {
+    // Set filename
+    std::string filename="";
+    std::cout << "What would you like to name the file: ";
+    // Clear any error flags in cin
+    std::cin.clear();
+    // Consume any remaining input, including the newline character
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    // Read user input
+    std::getline(std::cin, filename);
+
+    // Attempt to open file
+    std::ofstream outputFile(filename);
+
+    // If file is not found/opened
+    if (!outputFile.is_open()) {
+      std::cout << "Failed to open/find filename.";
+      return;
+    } 
+
+    // If file is found
+    for (const auto& entry: eventMap) {
+      const int& date = entry.first;
+      const std::vector<Event>& events = entry.second;
+
+      // Write to file
+      for (const Event& event: events) {
+        outputFile << date << ": " << event.name << ", " << event.time <<  ", " << event.location << ".\n";
+      }
+    }
+
+    // Finished writing, close file.
+    outputFile.close();
+    std::cout << "File succesfully exported.\n";
   }
 
 private:
   std::map<int, std::vector<Event>> eventMap;
 };
 
+// Draw Event Lists
 EventTracker* event_Draw(int event_choice, EventTracker* calendar_t) {
   int manage_date=0;
   std::string event_text="";
@@ -117,40 +194,42 @@ EventTracker* event_Draw(int event_choice, EventTracker* calendar_t) {
 
   // Display today's event
   if (event_choice == 1) {
-    std::cout << "Event Manager: View events" << std::endl << std::endl;
+    std::cout << "Event Manager: View events\n\n";
     manage_date = getUserInput(event_text, 19950101, 20501231, "Enter date (YYYYMMDD): ");
     calendar_t->viewEvent(manage_date);
-    std::cout << std::endl << "Event viewed" << std::endl;
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     pauseConsole();
   }
   // Add an event
   else if (event_choice == 2) {
-    std::cout << "Event Manager: Add an event" << std::endl << std::endl;
+    std::cout << "Event Manager: Add an event\n\n";
     manage_date = getUserInput(event_text, 19950101, 20501231, "Enter date (YYYYMMDD): ");
     calendar_t->addEvent(manage_date);
-    std::cout << std::endl << "Event added" << std::endl;
     pauseConsole();
   }
   // Remove an event
   else if (event_choice == 3) {
-    std::cout << "Remove event" << std::endl;
-    std::cout << std::endl; pauseConsole();
+    std::cout << "Event Manager: Remove event\n\n";
+    manage_date = getUserInput(event_text, 19950101, 20501231, "Enter date (YYYYMMDD): ");
+    calendar_t->removeEvent(manage_date);
+    pauseConsole();
   }
   // Import events
   else if (event_choice == 4) {
-    std::cout << "Import events" << std::endl;
-    std::cout << std::endl; pauseConsole();
+    std::cout << "Event Manager: Import events\n\n";
+    calendar_t->importEvents();
+    pauseConsole();
   }
   // Export events
   else if (event_choice == 5) {
-    std::cout << "Export events" << std::endl;
-    std::cout << std::endl; pauseConsole();
+    std::cout << "Event Manager: Export events\n\n";
+    calendar_t->exportEvents();
+    pauseConsole();
   }
 
   return calendar_t;
 }
 
+// Build Event Menu
 std::string event_DisplayMenu() {
   std::string event_menu="";
   // Clear the screen
@@ -167,6 +246,7 @@ std::string event_DisplayMenu() {
   return event_menu;
 }
 
+// Display Event Menu
 EventTracker* event_Main(EventTracker* calendar_t) {
   int event_choice=0;
   int error=0;

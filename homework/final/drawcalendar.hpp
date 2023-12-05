@@ -70,26 +70,26 @@ EventTracker* calendar_Draw(int calendar_choice, EventTracker* calendar_t) {
       std::cout << "\n";
       if (day > days_in_month) break;
     }
-    std::cout << "\n"; pauseConsole();
+    pauseConsole();
   }
 
   // Draw the weeks calendar
   if (calendar_choice == 2) {
     std::cout << "Drawing this week's calendar\n";
-    std::cout << "\n"; pauseConsole();
+    pauseConsole();
   }
 
 
   // Draw a day's calendar
   if (calendar_choice == 3) {
     std::cout << "Drawing today's calendar\n";
-    std::cout << "\n"; pauseConsole();
+    pauseConsole();
   }
 
   // Draw today's calendar
   if (calendar_choice == 4) {
     std::cout << "Drawing today's calendar\n";
-    std::cout << "\n"; pauseConsole();
+    pauseConsole();
   }
 
   // Return calendar
@@ -102,6 +102,7 @@ std::string calendar_DisplayMenu() {
   display_menu += "\033[2J\033[1;1H";
 
   // Draw calendar menu
+  display_menu += "Welcome to the Calendar Viewer!\n\n";
   display_menu += "\033[35m1.\033[0m View month calendar\n";
   display_menu += "\033[35m2.\033[0m View week calendar\n";
   display_menu += "\033[35m3.\033[0m View a specific day calendar\n";

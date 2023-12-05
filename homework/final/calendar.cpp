@@ -14,6 +14,7 @@ File Function:
 #include <iostream>
 // For std::cin, std::cout, std::endl
 
+// Build Main Menu
 std::string menu_Display(){
   std::string main_menu = "";
   // Clear the screen and move the cursor to the top-left corner
@@ -29,6 +30,7 @@ std::string menu_Display(){
   return main_menu;
 }
 
+// Detect event tracker, if none upload or create new
 EventTracker* assign_Tracker(EventTracker* calendar_t) {
   std::string assign_TrackerDisplay = ""; 
   int choice=0;
@@ -41,7 +43,7 @@ EventTracker* assign_Tracker(EventTracker* calendar_t) {
   assign_TrackerDisplay += "\033[35m2.\033[0m Upload an existing Event Tracker\n\n";
 
   // Handle menu choice
-  choice = getUserInput(assign_TrackerDisplay, 1, 3, "Enter tracker option: ");
+  choice = getUserInput(assign_TrackerDisplay, 1, 2, "Enter tracker option: ");
 
   // Initialize new EventTracker
   if (choice == 1) calendar_t = new EventTracker();
@@ -58,8 +60,7 @@ EventTracker* assign_Tracker(EventTracker* calendar_t) {
   return calendar_t;
 }
 
-// Main, this is for initially loading EventTracker, 
-// drawing calendars and managing events
+// Main, import/create tracker, navigation to calendar and event menu's
 int main () {
   int main_choice=0;
   int error=0;
