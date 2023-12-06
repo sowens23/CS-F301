@@ -7,10 +7,12 @@ File Name: calendar.cpp
 File Function: 
 
 TODO: 
-  1) Remove duplicates.
+  1) Option to remove all duplicates.
   2) Option when importing to clean the slate.
+  3) Option when importing to skip duplicates.
   3) GUI interface
   4) .ics export/import.
+  5) 
 
 */
 
