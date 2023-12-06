@@ -5,6 +5,13 @@ Date Created: 2023-10-11
 Date Updated: 2023-11-12
 File Name: calendar.cpp
 File Function: 
+
+TODO: 
+  1) Remove duplicates.
+  2) Option when importing to clean the slate.
+  3) GUI interface
+  4) .ics export/import.
+
 */
 
 #include "drawcalendar.hpp"
@@ -14,7 +21,7 @@ File Function:
 #include <iostream>
 // For std::cin, std::cout, std::endl
 
-// Build Main Menu
+// Build Main Menu string
 std::string menu_Display(){
   std::string main_menu = "";
   // Clear the screen and move the cursor to the top-left corner
@@ -25,7 +32,7 @@ std::string menu_Display(){
 
   // Using ANSI escape code for light red/magenta color
   main_menu += "\033[35m1.\033[0m View calendar\n";
-  main_menu +="\033[35m2.\033[0m Manage events\n";
+  main_menu += "\033[35m2.\033[0m Manage events\n";
   main_menu += "\033[35m3.\033[0m \033[36mExit\033[0m\n\n";
   return main_menu;
 }
@@ -48,15 +55,12 @@ EventTracker* assign_Tracker(EventTracker* calendar_t) {
   // Initialize new EventTracker
   if (choice == 1) calendar_t = new EventTracker();
 
-  // Select EventTracker file locally
+  // Select EventTracker file locally and import
   if (choice == 2) {
-    // std::string filename;
-    // std::cout << "Enter filename to load: ";
-    // std::cin >> filename;
-    // calendar_t->loadEventTracker(calendar_t, filename);
     calendar_t = new EventTracker();
-  } 
-  
+    calendar_t->importEvents();
+  }
+
   return calendar_t;
 }
 

@@ -82,24 +82,10 @@ public:
   }
 
   // Add Event
-  void addEvent(const int& date) {
-    std::string name;
-    std::string time;
-    std::string location;
-
-    // Get Event Info
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    std::cout << "Enter event name: ";
-    std::getline(std::cin, name);
-    std::cout << "Enter event time: ";
-    std::getline(std::cin, time);
-    std::cout << "Enter event location: ";
-    std::getline(std::cin, location);
-
+  void addEvent(const int& date, const std::string& name, const std::string& time, const std::string& location) {
     // Create event
     Event event_t(name, time, location);
     eventMap[date].push_back(event_t);
-    std::cout << "\nEvent added.";
   }
 
   // Remove Event
@@ -141,7 +127,80 @@ public:
 
   // Import Events
   void importEvents() {
-    // Update me!
+    // Set filename
+    std::string filename = "";
+    std::cout << "What is the name of the file: ";
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::getline(std::cin, filename);
+    std::cout << std::endl;
+
+    // Attempt to open file
+    std::ifstream inputFile(filename);
+
+    // If file is not found/opened
+    if (!inputFile.is_open()) {
+      std::cout << "Failed to open/find filename.";
+      return;
+    }
+
+    // Import data
+    std::string line;
+    while (std::getline(inputFile, line)) {
+      // Parse the line to extract date and event information
+      std::cout << "Importing -> " << line << std::endl;
+
+      size_t colonPos = line.find(':');
+      if (colonPos != std::string::npos) {
+        int date = std::stoi(line.substr(0, colonPos));
+        std::string eventPart = line.substr(colonPos + 1);
+
+        // Split eventPart into individual events
+        size_t commaPos = 0;
+        while ((commaPos = eventPart.find(',')) != std::string::npos) {
+        // Pull eventName
+        std::string eventName = eventPart.substr(0, commaPos);
+        eventPart.erase(0, commaPos + 1);
+
+        // Trim leading spaces
+        eventName.erase(0, eventName.find_first_not_of(' '));
+        eventName.erase(eventName.find_last_not_of(' ') + 1);
+
+        // Pull eventTime
+        size_t timePos = eventPart.find(',');
+        if (timePos != std::string::npos) {
+          std::string eventTime = eventPart.substr(0, timePos);
+          eventPart.erase(0, timePos + 1);
+
+          // Trim leading spaces
+          eventTime.erase(0, eventTime.find_first_not_of(' '));
+          eventTime.erase(eventTime.find_last_not_of(' ') + 1);
+
+          // Pull eventLocation
+          size_t locationPos = eventPart.find('.');
+          if (locationPos != std::string::npos) {
+            std::string eventLocation = eventPart.substr(0, locationPos);
+            eventPart.erase(0, locationPos + 1);
+
+            // Trim leading spaces
+            eventLocation.erase(0, eventLocation.find_first_not_of(' '));
+            eventLocation.erase(eventLocation.find_last_not_of(' ') + 1);
+
+            addEvent(date, eventName, eventTime, eventLocation);
+            } else {
+              // Handle error, missing event location
+              std::cout << "Oops: Missing event location\n";
+            }
+          } else {
+            // Handle error, missing event time
+            std::cout << "Oops: Missing event time\n";
+          }
+        }
+      }
+    }
+
+    // Finished importing
+    inputFile.close();
+    std::cout << "File successfully imported.\n";
   }
 
   // Export Events
@@ -203,7 +262,22 @@ EventTracker* event_Draw(int event_choice, EventTracker* calendar_t) {
   else if (event_choice == 2) {
     std::cout << "Event Manager: Add an event\n\n";
     manage_date = getUserInput(event_text, 19950101, 20501231, "Enter date (YYYYMMDD): ");
-    calendar_t->addEvent(manage_date);
+    std::string name;
+    std::string time;
+    std::string location;
+
+    // Get Event Info
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::cout << "Enter event name: ";
+    std::getline(std::cin, name);
+    std::cout << "Enter event time: ";
+    std::getline(std::cin, time);
+    std::cout << "Enter event location: ";
+    std::getline(std::cin, location);
+
+    // Add Event
+    calendar_t->addEvent(manage_date, name, time, location);
+    std::cout << "\nEvent added.";
     pauseConsole();
   }
   // Remove an event
