@@ -48,9 +48,21 @@
   | [Week-9](#Week-9) | | |
   | [Week-10](#Week-10) | | Project Proposal Presentation |
   | [Week-11](#Week-11) | | |
-  | [Week-12](#Week-12) | Final Project Rough Draft Due | |
-  | [Week-13](#Week-13) | | Fall Break (1 class) |
+  | [Week-12](#Week-12) | Final Project Rough Draft | |
+  | [Week-13](#Week-13) | | Fall Break |
   | [Week-14](#Week-14) | | |
+  | [Week-15](#Week-15) | Final Project PResentation | |
+
+# Week-15 (Last week of instruction)
+[Top](#TOP)
+## 2023-12-06
+  - Final next Friday
+  - Class overview review
+## 2023-12-04
+  - Second round of final presentations
+  - I gave my presentation on the final project
+## 2023-12-04
+  - First round of final presentations
 
 # Week-14
 [Top](#TOP)
